@@ -1,0 +1,1146 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gypsy Tattoo — Admin</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+
+    </style>
+  </head>
+  <body>
+    <!-- ══ LOGIN SCREEN ══ -->
+    <div id="loginScreen">
+      <div class="login-box">
+        <div class="login-logo">🌿 Gypsy Tattoo</div>
+        <div class="login-sub">Owner Admin Panel</div>
+        <label for="loginEmail">Email</label>
+        <input
+          type="email"
+          id="loginEmail"
+          placeholder="Enter your email"
+          onkeydown="if (event.key === 'Enter') doLogin();"
+        />
+        <label for="loginPass" style="margin-top:0.75rem">Password</label>
+        <input
+          type="password"
+          id="loginPass"
+          placeholder="Enter your password"
+          onkeydown="if (event.key === 'Enter') doLogin();"
+        />
+        <button class="login-btn" id="loginBtn" onclick="doLogin()">Sign In</button>
+        <div class="login-error" id="loginError" style="display:none">
+          Incorrect email or password. Please try again.
+        </div>
+        <div class="login-hint">
+          Login is managed securely via Firebase Authentication.
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ ADMIN APP ══ -->
+    <div id="adminApp">
+      <header class="admin-header">
+        <div class="admin-header-title">🌿 Gypsy Tattoo <span>Admin</span></div>
+        <div class="admin-nav-links">
+          <a href="markets.html" class="view-live-btn">👁 View Live Page</a>
+          <button class="logout-btn" onclick="logout()">Sign Out</button>
+        </div>
+      </header>
+
+      <div class="admin-body">
+        <!-- ── MARKETS ── -->
+        <div class="section-header">
+          <h2 class="section-title">🛒 Markets</h2>
+          <button class="add-btn" onclick="openModal('market')">
+            + Add Market
+          </button>
+        </div>
+        <div class="entries-grid" id="admin-markets-list"></div>
+
+        <hr class="divider" />
+
+        <!-- ── EVENTS ── -->
+        <div class="section-header">
+          <h2 class="section-title">🎉 Events</h2>
+          <button class="add-btn" onclick="openModal('event')">
+            + Add Event
+          </button>
+        </div>
+        <div class="entries-grid" id="admin-events-list"></div>
+
+        <hr class="divider" />
+
+        <!-- ── PORTFOLIO IMAGES ── -->
+        <div class="section-header">
+          <h2 class="section-title">🖼️ Portfolio Gallery</h2>
+        </div>
+        <div class="img-section">
+          <div class="img-upload-zone" id="portfolioZone">
+            <input
+              type="file"
+              id="portfolioFileInput"
+              accept="image/*"
+              multiple
+              onchange="handlePortfolioUpload(event)"
+            />
+            <div class="upload-icon">📷</div>
+            <strong>Click or drag to upload portfolio images</strong>
+            <p>Supports JPG, PNG, WEBP — multiple files at once</p>
+          </div>
+          <div class="img-grid" id="portfolioImgGrid"></div>
+        </div>
+
+        <hr class="divider" />
+
+        <!-- ── FLASH TATTOOS ── -->
+        <div class="section-header">
+          <h2 class="section-title">⚡ Flash Tattoos</h2>
+          <button class="add-btn" onclick="openFlashModal()">
+            + Add Flash
+          </button>
+        </div>
+        <div class="flash-admin-grid" id="flashAdminList"></div>
+
+        <hr class="divider" />
+
+        <!-- ── PRICING ── -->
+        <div class="section-header">
+          <h2 class="section-title">💳 Pricing</h2>
+          <button class="add-btn" onclick="openPricingModal()">
+            + Add Row
+          </button>
+        </div>
+
+        <!-- Tattoo Prices -->
+        <div class="pricing-block">
+          <div class="pricing-block-header">
+            <h3>Tattoo Price List</h3>
+          </div>
+          <table class="pricing-admin-table" id="tattooAdminTable">
+            <thead>
+              <tr>
+                <th>Size / Description</th>
+                <th>Price</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="tattooAdminBody"></tbody>
+          </table>
+        </div>
+
+        <!-- Tattoo Extras -->
+        <div class="pricing-block">
+          <div class="pricing-block-header">
+            <h3>Extras (add-ons)</h3>
+          </div>
+          <table class="pricing-admin-table" id="extrasAdminTable">
+            <thead>
+              <tr>
+                <th>Extra</th>
+                <th>Price</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="extrasAdminBody"></tbody>
+          </table>
+        </div>
+
+        <!-- Piercing -->
+        <div class="pricing-block">
+          <div class="pricing-block-header">
+            <h3>Piercing Price List</h3>
+          </div>
+          <table class="pricing-admin-table" id="piercingAdminTable">
+            <thead>
+              <tr>
+                <th>Service</th>
+                <th>Price</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="piercingAdminBody"></tbody>
+          </table>
+          <div class="pricing-note-edit">
+            <label>Piercing includes note:</label>
+            <textarea
+              id="piercingNoteInput"
+              rows="4"
+              placeholder="Describe what's included in piercing service…"
+            ></textarea>
+            <button
+              class="save-btn"
+              style="margin-top: 0.5rem"
+              onclick="savePiercingNote()"
+            >
+              Save Note
+            </button>
+          </div>
+        </div>
+        <!-- Wedding/Events Package -->
+        <div class="pricing-block">
+          <div class="pricing-block-header">
+            <h3>✧ Wedding / Private Event Packages</h3>
+          </div>
+          <div class="wedding-admin-fields">
+            <div class="wedding-admin-row">
+              <label>Full Day Booking (6 hours) — Price</label>
+              <input type="text" id="weddingFullDayPrice" placeholder="e.g. R4,000.00" />
+            </div>
+            <div class="wedding-admin-row">
+              <label>Intimate Booking (3 hours) — Price</label>
+              <input type="text" id="weddingIntimatePrice" placeholder="e.g. R2,120.00" />
+            </div>
+          </div>
+          <button class="save-btn" style="margin-top:1rem" onclick="saveWeddingPackage()">Save Wedding Prices</button>
+        </div>
+
+        <!-- Travel Fee -->
+        <div class="pricing-block">
+          <div class="pricing-block-header">
+            <h3>Travel Fee</h3>
+          </div>
+          <table class="pricing-admin-table" id="travelAdminTable">
+            <thead>
+              <tr>
+                <th>Description</th>
+                <th>Price</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="travelAdminBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ PRICING MODAL ══ -->
+    <div
+      class="modal-overlay"
+      id="pricingModalOverlay"
+      onclick="handlePricingOverlayClick(event)"
+    >
+      <div class="modal" id="pricingModal">
+        <div class="modal-title" id="pricingModalTitle">Add Price Row</div>
+        <div class="form-grid">
+          <div class="field">
+            <label>Category</label>
+            <select id="pf-category">
+              <option value="tattoo">Tattoo</option>
+              <option value="extras">Extras</option>
+              <option value="piercing">Piercing</option>
+              <option value="wedding">Wedding/Events</option>
+              <option value="travel">Travel</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Description *</label>
+            <input
+              type="text"
+              id="pf-desc"
+              placeholder="e.g. 3 x 3cm, + Colouring, Both Ears"
+            />
+          </div>
+          <div class="field">
+            <label>Price *</label>
+            <input
+              type="text"
+              id="pf-price"
+              placeholder="e.g. R420.00 or R540.00/hr"
+            />
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button class="cancel-btn" onclick="closePricingModal()">
+            Cancel
+          </button>
+          <button class="save-btn" onclick="savePricingRow()">Save</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ FLASH MODAL ══ -->
+    <div
+      class="modal-overlay"
+      id="flashModalOverlay"
+      onclick="handleFlashOverlayClick(event)"
+    >
+      <div class="modal" id="flashModal">
+        <div class="modal-title" id="flashModalTitle">Add Flash Tattoo</div>
+        <div class="form-grid">
+          <div class="field">
+            <label>Image</label>
+            <div
+              class="flash-modal-img-preview"
+              id="flashImgPreview"
+              onclick="document.getElementById('flashFileInput').click()"
+            >
+              <div class="flash-modal-img-placeholder">
+                📷 Click to select image
+              </div>
+              <input
+                type="file"
+                id="flashFileInput"
+                accept="image/*"
+                onchange="handleFlashImgSelect(event)"
+                style="display: none"
+              />
+            </div>
+          </div>
+          <div class="field">
+            <label>Title *</label>
+            <input
+              type="text"
+              id="ff-title"
+              placeholder="e.g. Delicate Rose, Geometric Wolf"
+            />
+          </div>
+          <div class="field">
+            <label>Tag / Style</label>
+            <input
+              type="text"
+              id="ff-tag"
+              placeholder="e.g. Fine Line, Blackwork, Neo-Trad"
+            />
+          </div>
+          <div class="field">
+            <label>Status</label>
+            <select id="ff-status">
+              <option value="Available">Available</option>
+              <option value="Booked">Booked</option>
+              <option value="Sold">Sold</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button class="cancel-btn" onclick="closeFlashModal()">Cancel</button>
+          <button class="save-btn" onclick="saveFlash()">Save</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ MODAL ══ -->
+    <div
+      class="modal-overlay"
+      id="modalOverlay"
+      onclick="handleOverlayClick(event)"
+    >
+      <div class="modal" id="modal">
+        <div class="modal-title" id="modalTitle">Add Market</div>
+        <div class="form-grid">
+          <div class="field">
+            <label>Name *</label>
+            <input
+              type="text"
+              id="f-name"
+              placeholder="e.g. Sheds Market, Irene Village Market"
+            />
+          </div>
+          <div class="form-row">
+            <div class="field">
+              <label>Start Date *</label>
+              <input type="date" id="f-date" />
+            </div>
+            <div class="field">
+              <label
+                >End Date
+                <span style="font-weight: 400">(optional)</span></label
+              >
+              <input type="date" id="f-enddate" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="field">
+              <label>Time</label>
+              <input type="text" id="f-time" placeholder="e.g. 09:00 – 15:00" />
+            </div>
+            <div class="field">
+              <label>Recurring</label>
+              <select id="f-recurring">
+                <option value="">One-off</option>
+                <option value="weekly">Weekly</option>
+                <option value="monthly">Monthly</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label>Location / Venue</label>
+            <input
+              type="text"
+              id="f-location"
+              placeholder="e.g. Centurion, Pretoria"
+            />
+          </div>
+          <div class="field">
+            <label>Description</label>
+            <textarea
+              id="f-description"
+              placeholder="Any extra details visitors should know…"
+            ></textarea>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button class="cancel-btn" onclick="closeModal()">Cancel</button>
+          <button class="save-btn" onclick="saveEntry()">Save</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ TOAST ══ -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Firebase DB layer — must load before inline script -->
+    <script src="firebase-db.js"></script>
+    <!-- Firebase Auth compat SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+
+    <script>
+      // ── Auth (Firebase Authentication — no password stored in code) ──
+
+      function _waitForAuth(attempts = 0) {
+        return new Promise((resolve, reject) => {
+          if (typeof firebase !== "undefined" && firebase.auth) { resolve(); return; }
+          if (attempts > 40) { reject(new Error("Firebase Auth SDK not loaded.")); return; }
+          setTimeout(() => _waitForAuth(attempts + 1).then(resolve).catch(reject), 100);
+        });
+      }
+
+      // Restore session if still signed in
+      _waitForAuth().then(() => {
+        firebase.auth().onAuthStateChanged((user) => {
+          if (user) {
+            document.getElementById("loginScreen").classList.add("hidden");
+            document.getElementById("adminApp").classList.add("visible");
+            initAdminData();
+          }
+        });
+      });
+
+      async function doLogin() {
+        const email = document.getElementById("loginEmail").value.trim();
+        const pass  = document.getElementById("loginPass").value;
+        const errEl = document.getElementById("loginError");
+        const btn   = document.getElementById("loginBtn");
+
+        if (!email || !pass) {
+          errEl.style.display = "block";
+          errEl.textContent = "Please enter your email and password.";
+          return;
+        }
+
+        btn.disabled = true;
+        btn.textContent = "Signing in…";
+        errEl.style.display = "none";
+
+        try {
+          await _waitForAuth();
+          await firebase.auth().signInWithEmailAndPassword(email, pass);
+          // onAuthStateChanged above will reveal the admin app
+        } catch (err) {
+          errEl.style.display = "block";
+          errEl.textContent = "Incorrect email or password. Please try again.";
+          document.getElementById("loginPass").value = "";
+          document.getElementById("loginPass").focus();
+          btn.disabled = false;
+          btn.textContent = "Sign In";
+        }
+      }
+
+      function logout() {
+        firebase.auth().signOut().then(() => location.reload());
+      }
+
+      // ── Data helpers (now async — backed by Firebase) ──
+      // getData / setData are provided by firebase-db.js
+      // Synchronous shim for places that haven't been converted yet:
+      function getDataSync(key) {
+        const s = localStorage.getItem(key);
+        return s ? JSON.parse(s) : [];
+      }
+
+      function formatDate(dateStr) {
+        if (!dateStr) return { day: "--", month: "---", full: "" };
+        const d = new Date(dateStr + "T00:00:00");
+        return {
+          day: d.getDate(),
+          month: d.toLocaleString("en-ZA", { month: "short" }).toUpperCase(),
+          full: d.toLocaleDateString("en-ZA", {
+            weekday: "short",
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+          }),
+        };
+      }
+
+      function isPast(dateStr) {
+        const now = new Date();
+        now.setHours(0, 0, 0, 0);
+        return new Date(dateStr + "T00:00:00") < now;
+      }
+
+      // ── Modal state ──
+      let currentType = "market";
+      let editingId = null;
+
+      function openModal(type, id = null) {
+        currentType = type;
+        editingId = id;
+        const isEdit = id !== null;
+        document.getElementById("modalTitle").textContent =
+          (isEdit ? "Edit" : "Add") +
+          " " +
+          (type === "market" ? "Market" : "Event");
+
+        if (isEdit) {
+          const key = type === "market" ? "gypsyMarkets" : "gypsyEvents";
+          const item = getData(key).find((e) => e.id === id);
+          if (item) {
+            document.getElementById("f-name").value = item.name || "";
+            document.getElementById("f-date").value = item.date || "";
+            document.getElementById("f-enddate").value = item.endDate || "";
+            document.getElementById("f-time").value = item.time || "";
+            document.getElementById("f-location").value = item.location || "";
+            document.getElementById("f-description").value =
+              item.description || "";
+            document.getElementById("f-recurring").value = item.recurring || "";
+          }
+        } else {
+          [
+            "f-name",
+            "f-date",
+            "f-enddate",
+            "f-time",
+            "f-location",
+            "f-description",
+          ].forEach((id) => {
+            document.getElementById(id).value = "";
+          });
+          document.getElementById("f-recurring").value = "";
+        }
+
+        document.getElementById("modalOverlay").classList.add("open");
+        setTimeout(() => document.getElementById("f-name").focus(), 100);
+      }
+
+      function closeModal() {
+        document.getElementById("modalOverlay").classList.remove("open");
+      }
+
+      function handleOverlayClick(e) {
+        if (e.target === document.getElementById("modalOverlay")) closeModal();
+      }
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeModal();
+      });
+
+      async function saveEntry() {
+        const name = document.getElementById("f-name").value.trim();
+        const date = document.getElementById("f-date").value;
+        if (!name || !date) {
+          showToast("⚠️ Name and date are required.");
+          return;
+        }
+
+        const entry = {
+          id: editingId || Date.now().toString(),
+          name,
+          date,
+          endDate: document.getElementById("f-enddate").value || "",
+          time: document.getElementById("f-time").value.trim() || "",
+          location: document.getElementById("f-location").value.trim() || "",
+          description:
+            document.getElementById("f-description").value.trim() || "",
+          recurring: document.getElementById("f-recurring").value || "",
+        };
+
+        const key = currentType === "market" ? "gypsyMarkets" : "gypsyEvents";
+        let list = getDataSync(key);
+
+        if (editingId) {
+          list = list.map((e) => (e.id === editingId ? entry : e));
+        } else {
+          list.push(entry);
+        }
+
+        closeModal();
+        showToast("⏳ Saving…");
+        try {
+          await setData(key, list);
+          showToast(editingId ? "✅ Updated successfully!" : "✅ Added successfully!");
+          renderAdmin();
+        } catch {
+          showToast("❌ Save failed — check your internet connection.");
+        }
+      }
+
+      async function deleteEntry(type, id) {
+        if (!confirm("Delete this entry? This cannot be undone.")) return;
+        const key = type === "market" ? "gypsyMarkets" : "gypsyEvents";
+        const list = getDataSync(key).filter((e) => e.id !== id);
+        showToast("⏳ Deleting…");
+        try {
+          await setData(key, list);
+          showToast("🗑 Deleted.");
+          renderAdmin();
+        } catch {
+          showToast("❌ Delete failed — check your internet connection.");
+        }
+      }
+
+      // ── Render ──
+      function renderAdmin() {
+        renderList("gypsyMarkets", "admin-markets-list", "market");
+        renderList("gypsyEvents", "admin-events-list", "event");
+      }
+
+      function renderList(key, containerId, type) {
+        const container = document.getElementById(containerId);
+        const list = getDataSync(key).sort(
+          (a, b) => new Date(a.date) - new Date(b.date),
+        );
+
+        if (!list.length) {
+          container.innerHTML = `
+          <div class="empty-admin">
+            <div class="icon">${type === "market" ? "🛒" : "🎉"}</div>
+            <p>No ${type === "market" ? "markets" : "events"} yet. Click "+ Add ${type === "market" ? "Market" : "Event"}" to get started.</p>
+          </div>`;
+          return;
+        }
+
+        container.innerHTML = list
+          .map((e) => {
+            const d = formatDate(e.date);
+            const past = isPast(e.date);
+            return `
+        <div class="admin-card" style="${past ? "opacity:0.6" : ""}">
+          <div class="admin-card-date">
+            <div class="day">${d.day}</div>
+            <div class="month">${d.month}</div>
+          </div>
+          <div class="admin-card-info">
+            <div class="admin-card-name">
+              ${e.name}
+              ${past ? '<span class="past-badge">Past</span>' : ""}
+              ${e.recurring ? `<span class="past-badge" style="background:#e8f5e9;color:#2e7d32">${e.recurring}</span>` : ""}
+            </div>
+            <div class="admin-card-meta">
+              <span>📅 ${d.full}${e.endDate ? " → " + formatDate(e.endDate).full : ""}</span>
+              ${e.location ? `<span>📍 ${e.location}</span>` : ""}
+              ${e.time ? `<span>🕐 ${e.time}</span>` : ""}
+            </div>
+            ${e.description ? `<div class="admin-card-desc">${e.description}</div>` : ""}
+          </div>
+          <div class="admin-card-actions">
+            <button class="icon-btn edit-icon-btn" onclick="openModal('${type}', '${e.id}')" title="Edit">✏️</button>
+            <button class="icon-btn delete-icon-btn" onclick="deleteEntry('${type}', '${e.id}')" title="Delete">🗑</button>
+          </div>
+        </div>`;
+          })
+          .join("");
+      }
+
+      function showToast(msg) {
+        const t = document.getElementById("toast");
+        t.textContent = msg;
+        t.classList.add("show");
+        setTimeout(() => t.classList.remove("show"), 3000);
+      }
+
+      // ── Portfolio Images ──
+      function getPortfolioImgs() {
+        return getDataSync("gypsyPortfolio");
+      }
+      async function setPortfolioImgs(v) {
+        localStorage.setItem("gypsyPortfolio", JSON.stringify(v));
+        await setData("gypsyPortfolio", v);
+      }
+
+      function handlePortfolioUpload(e) {
+        const files = Array.from(e.target.files);
+        if (!files.length) return;
+        let loaded = 0;
+        files.forEach((file) => {
+          const reader = new FileReader();
+          reader.onload = async (ev) => {
+            const imgs = getPortfolioImgs();
+            imgs.push({
+              id: Date.now().toString() + Math.random(),
+              src: ev.target.result,
+            });
+            loaded++;
+            if (loaded === files.length) {
+              showToast("⏳ Uploading " + files.length + " image(s)…");
+              try {
+                await setPortfolioImgs(imgs);
+                renderPortfolioAdmin();
+                showToast("✅ " + files.length + " image(s) uploaded!");
+              } catch {
+                showToast("❌ Upload failed — images may be too large for free Firebase tier.");
+              }
+            } else {
+              // intermediate — just update local
+              localStorage.setItem("gypsyPortfolio", JSON.stringify(imgs));
+            }
+          };
+          reader.readAsDataURL(file);
+        });
+        e.target.value = "";
+      }
+
+      async function deletePortfolioImg(id) {
+        if (!confirm("Remove this image?")) return;
+        const imgs = getPortfolioImgs().filter((i) => i.id !== id);
+        showToast("⏳ Removing…");
+        try {
+          await setPortfolioImgs(imgs);
+          renderPortfolioAdmin();
+          showToast("🗑 Image removed.");
+        } catch {
+          showToast("❌ Remove failed.");
+        }
+      }
+
+      function renderPortfolioAdmin() {
+        const grid = document.getElementById("portfolioImgGrid");
+        const imgs = getPortfolioImgs();
+        if (!imgs.length) {
+          grid.innerHTML = "";
+          return;
+        }
+        grid.innerHTML = imgs
+          .map(
+            (img) => `
+        <div class="img-thumb">
+          <img src="${img.src}" alt="Portfolio image" />
+          <div class="img-thumb-overlay">
+            <button class="img-thumb-del" onclick="deletePortfolioImg('${img.id}')">🗑 Remove</button>
+          </div>
+        </div>`,
+          )
+          .join("");
+      }
+
+      // Drag-and-drop on portfolio zone
+      document.addEventListener("DOMContentLoaded", () => {
+        const zone = document.getElementById("portfolioZone");
+        if (zone) {
+          zone.addEventListener("dragover", (e) => {
+            e.preventDefault();
+            zone.classList.add("dragover");
+          });
+          zone.addEventListener("dragleave", () =>
+            zone.classList.remove("dragover"),
+          );
+          zone.addEventListener("drop", (e) => {
+            e.preventDefault();
+            zone.classList.remove("dragover");
+            const dt = e.dataTransfer;
+            if (dt.files.length)
+              handlePortfolioUpload({ target: dt, files: dt.files });
+          });
+        }
+      });
+
+      // ── Flash Tattoos ──
+      function getFlash() {
+        return getDataSync("gypsyFlash");
+      }
+      async function setFlash(v) {
+        localStorage.setItem("gypsyFlash", JSON.stringify(v));
+        await setData("gypsyFlash", v);
+      }
+
+      let flashEditId = null;
+      let flashImgData = null;
+
+      function openFlashModal(id = null) {
+        flashEditId = id;
+        flashImgData = null;
+        const isEdit = id !== null;
+        document.getElementById("flashModalTitle").textContent = isEdit
+          ? "Edit Flash Tattoo"
+          : "Add Flash Tattoo";
+
+        // Reset form
+        document.getElementById("ff-title").value = "";
+        document.getElementById("ff-tag").value = "";
+        document.getElementById("ff-status").value = "Available";
+        resetFlashImgPreview();
+
+        if (isEdit) {
+          const item = getFlash().find((f) => f.id === id);
+          if (item) {
+            document.getElementById("ff-title").value = item.title || "";
+            document.getElementById("ff-tag").value = item.tag || "";
+            document.getElementById("ff-status").value =
+              item.status || "Available";
+            if (item.src) {
+              flashImgData = item.src;
+              showFlashImgPreview(item.src);
+            }
+          }
+        }
+
+        document.getElementById("flashModalOverlay").classList.add("open");
+        setTimeout(() => document.getElementById("ff-title").focus(), 100);
+      }
+
+      function closeFlashModal() {
+        document.getElementById("flashModalOverlay").classList.remove("open");
+      }
+
+      function handleFlashOverlayClick(e) {
+        if (e.target === document.getElementById("flashModalOverlay"))
+          closeFlashModal();
+      }
+
+      function handleFlashImgSelect(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          flashImgData = ev.target.result;
+          showFlashImgPreview(ev.target.result);
+        };
+        reader.readAsDataURL(file);
+      }
+
+      function showFlashImgPreview(src) {
+        const preview = document.getElementById("flashImgPreview");
+        preview.innerHTML = `<img src="${src}" alt="Preview" style="pointer-events:none" /><input type="file" id="flashFileInput" accept="image/*" onchange="handleFlashImgSelect(event)" style="display:none" />`;
+      }
+
+      function resetFlashImgPreview() {
+        const preview = document.getElementById("flashImgPreview");
+        preview.innerHTML = `<div class="flash-modal-img-placeholder">📷 Click to select image</div><input type="file" id="flashFileInput" accept="image/*" onchange="handleFlashImgSelect(event)" style="display:none" />`;
+      }
+
+      async function saveFlash() {
+        const title = document.getElementById("ff-title").value.trim();
+        if (!title) {
+          showToast("⚠️ Title is required.");
+          return;
+        }
+
+        const entry = {
+          id: flashEditId || Date.now().toString(),
+          title,
+          tag: document.getElementById("ff-tag").value.trim(),
+          status: document.getElementById("ff-status").value,
+          src:
+            flashImgData ||
+            (flashEditId
+              ? (getFlash().find((f) => f.id === flashEditId) || {}).src
+              : null) ||
+            null,
+        };
+
+        let list = getFlash();
+        const wasEdit = !!flashEditId;
+        if (flashEditId) {
+          list = list.map((f) => (f.id === flashEditId ? entry : f));
+        } else {
+          list.push(entry);
+        }
+
+        closeFlashModal();
+        showToast("⏳ Saving…");
+        try {
+          await setFlash(list);
+          showToast(wasEdit ? "✅ Flash updated!" : "✅ Flash added!");
+          renderFlashAdmin();
+        } catch {
+          showToast("❌ Save failed — check your internet connection.");
+        }
+      }
+
+      async function deleteFlash(id) {
+        if (!confirm("Delete this flash tattoo?")) return;
+        showToast("⏳ Deleting…");
+        try {
+          await setFlash(getFlash().filter((f) => f.id !== id));
+          showToast("🗑 Deleted.");
+          renderFlashAdmin();
+        } catch {
+          showToast("❌ Delete failed.");
+        }
+      }
+
+      function renderFlashAdmin() {
+        const list = document.getElementById("flashAdminList");
+        const flash = getFlash();
+
+        const statusColors = {
+          Available: "status-available",
+          Booked: "status-booked",
+          Sold: "status-sold",
+        };
+
+        if (!flash.length) {
+          list.innerHTML = `<div class="empty-admin"><div class="icon">⚡</div><p>No flash tattoos yet. Click "+ Add Flash" to get started.</p></div>`;
+          return;
+        }
+
+        list.innerHTML = flash
+          .map(
+            (f) => `
+        <div class="flash-admin-card">
+          <div class="flash-admin-thumb">
+            ${f.src ? `<img src="${f.src}" alt="${f.title}" />` : "⚡"}
+          </div>
+          <div class="flash-admin-info">
+            <div class="flash-admin-title">${f.title}</div>
+            <div class="flash-admin-tag">
+              ${f.tag ? f.tag + " · " : ""}
+              <span class="status-tag ${statusColors[f.status] || "status-available"}">${f.status}</span>
+            </div>
+          </div>
+          <div class="admin-card-actions">
+            <button class="icon-btn edit-icon-btn" onclick="openFlashModal('${f.id}')" title="Edit">✏️</button>
+            <button class="icon-btn delete-icon-btn" onclick="deleteFlash('${f.id}')" title="Delete">🗑</button>
+          </div>
+        </div>`,
+          )
+          .join("");
+      }
+
+      // ── Pricing ──
+      const PRICING_DEFAULTS = {
+        tattoo: [
+          { id: "t1", desc: "1.5 x 1.5cm", price: "R300.00" },
+          { id: "t2", desc: "2 x 2cm", price: "R360.00" },
+          { id: "t3", desc: "3 x 3cm", price: "R420.00" },
+          { id: "t4", desc: "4 x 4cm", price: "R480.00" },
+          { id: "t5", desc: "5 x 5cm", price: "R540.00" },
+          { id: "t6", desc: "Bigger than 5 x 5cm", price: "R540.00/hr" },
+        ],
+        extras: [
+          { id: "e1", desc: "+ Colouring", price: "+ R100.00" },
+          { id: "e2", desc: "+ Shading", price: "+ R100.00" },
+        ],
+        piercing: [
+          { id: "p1", desc: "Single Piercing", price: "R300.00" },
+          { id: "p2", desc: "Both Ears", price: "R450.00" },
+        ],
+        travel: [{ id: "v1", desc: "Call-out Travel Fee", price: "R200.00" }],
+      };
+
+      const PIERCING_NOTE_DEFAULT =
+        "Piercing includes: Piercing Service (Needle procedure), Standard Jewellery (You cannot bring your own jewellery), Numbing (Bactine Spray).";
+
+      function getPricing() {
+        const stored = localStorage.getItem("gypsyPricing");
+        return stored
+          ? JSON.parse(stored)
+          : JSON.parse(JSON.stringify(PRICING_DEFAULTS));
+      }
+      async function setPricing(v) {
+        localStorage.setItem("gypsyPricing", JSON.stringify(v));
+        await setData("gypsyPricing", v);
+      }
+      function getPiercingNote() {
+        return (
+          localStorage.getItem("gypsyPiercingNote") || PIERCING_NOTE_DEFAULT
+        );
+      }
+
+      let pricingEditId = null;
+      let pricingEditCat = null;
+
+      function openPricingModal(cat = null, id = null) {
+        pricingEditId = id;
+        pricingEditCat = cat;
+        document.getElementById("pricingModalTitle").textContent = id
+          ? "Edit Price Row"
+          : "Add Price Row";
+        document.getElementById("pf-desc").value = "";
+        document.getElementById("pf-price").value = "";
+        if (cat) document.getElementById("pf-category").value = cat;
+        if (id) {
+          const pricing = getPricing();
+          const row = (pricing[cat] || []).find((r) => r.id === id);
+          if (row) {
+            document.getElementById("pf-desc").value = row.desc;
+            document.getElementById("pf-price").value = row.price;
+          }
+        }
+        document.getElementById("pricingModalOverlay").classList.add("open");
+        setTimeout(() => document.getElementById("pf-desc").focus(), 100);
+      }
+
+      function closePricingModal() {
+        document.getElementById("pricingModalOverlay").classList.remove("open");
+      }
+
+      function handlePricingOverlayClick(e) {
+        if (e.target === document.getElementById("pricingModalOverlay"))
+          closePricingModal();
+      }
+
+      async function savePricingRow() {
+        const desc = document.getElementById("pf-desc").value.trim();
+        const price = document.getElementById("pf-price").value.trim();
+        const cat = document.getElementById("pf-category").value;
+        if (!desc || !price) {
+          showToast("⚠️ Description and price are required.");
+          return;
+        }
+
+        const pricing = getPricing();
+        if (!pricing[cat]) pricing[cat] = [];
+
+        if (pricingEditId) {
+          pricing[pricingEditCat] = (pricing[pricingEditCat] || []).map((r) =>
+            r.id === pricingEditId ? { ...r, desc, price } : r,
+          );
+          if (pricingEditCat !== cat) {
+            const row = pricing[pricingEditCat].find(
+              (r) => r.id === pricingEditId,
+            );
+            pricing[pricingEditCat] = pricing[pricingEditCat].filter(
+              (r) => r.id !== pricingEditId,
+            );
+            if (row) {
+              row.desc = desc;
+              row.price = price;
+              pricing[cat].push(row);
+            }
+          }
+        } else {
+          pricing[cat].push({ id: Date.now().toString(), desc, price });
+        }
+
+        closePricingModal();
+        showToast("⏳ Saving…");
+        try {
+          await setPricing(pricing);
+          showToast(pricingEditId ? "✅ Price updated!" : "✅ Price row added!");
+          renderPricingAdmin();
+        } catch {
+          showToast("❌ Save failed — check your internet connection.");
+        }
+      }
+
+      async function deletePricingRow(cat, id) {
+        if (!confirm("Delete this price row?")) return;
+        const pricing = getPricing();
+        pricing[cat] = (pricing[cat] || []).filter((r) => r.id !== id);
+        showToast("⏳ Deleting…");
+        try {
+          await setPricing(pricing);
+          renderPricingAdmin();
+          showToast("🗑 Deleted.");
+        } catch {
+          showToast("❌ Delete failed.");
+        }
+      }
+
+      async function savePiercingNote() {
+        const note = document.getElementById("piercingNoteInput").value.trim();
+        localStorage.setItem("gypsyPiercingNote", note);
+        showToast("⏳ Saving…");
+        try {
+          await setData("gypsyPiercingNote", note);
+          showToast("✅ Piercing note saved!");
+        } catch {
+          showToast("❌ Save failed.");
+        }
+      }
+
+      function renderPricingTable(cat, tbodyId) {
+        const pricing = getPricing();
+        const rows = pricing[cat] || [];
+        const tbody = document.getElementById(tbodyId);
+        if (!rows.length) {
+          tbody.innerHTML = `<tr><td colspan="3" style="color:#999;font-style:italic;padding:0.5rem">No rows yet.</td></tr>`;
+          return;
+        }
+        tbody.innerHTML = rows
+          .map(
+            (r) => `
+          <tr>
+            <td>${r.desc}</td>
+            <td><strong>${r.price}</strong></td>
+            <td style="text-align:right;white-space:nowrap">
+              <button class="icon-btn edit-icon-btn" onclick="openPricingModal('${cat}','${r.id}')" title="Edit">✏️</button>
+              <button class="icon-btn delete-icon-btn" onclick="deletePricingRow('${cat}','${r.id}')" title="Delete">🗑</button>
+            </td>
+          </tr>`,
+          )
+          .join("");
+      }
+
+      const WEDDING_PACKAGE_DEFAULTS = {
+        priceFullDay: "R4,000.00",
+        priceIntimate: "R2,120.00",
+      };
+
+      function getWeddingPackage() {
+        const s = localStorage.getItem("gypsyWeddingPackage");
+        return s ? JSON.parse(s) : { ...WEDDING_PACKAGE_DEFAULTS };
+      }
+
+      async function saveWeddingPackage() {
+        const fd = document.getElementById("weddingFullDayPrice").value.trim();
+        const int = document.getElementById("weddingIntimatePrice").value.trim();
+        if (!fd || !int) { showToast("⚠️ Both prices are required."); return; }
+        const pkg = { priceFullDay: fd, priceIntimate: int };
+        localStorage.setItem("gypsyWeddingPackage", JSON.stringify(pkg));
+        showToast("⏳ Saving…");
+        try {
+          await setData("gypsyWeddingPackage", pkg);
+          showToast("✅ Wedding prices saved!");
+        } catch {
+          showToast("❌ Save failed.");
+        }
+      }
+
+      function renderPricingAdmin() {
+        renderPricingTable("tattoo", "tattooAdminBody");
+        renderPricingTable("extras", "extrasAdminBody");
+        renderPricingTable("piercing", "piercingAdminBody");
+        renderPricingTable("travel", "travelAdminBody");
+        document.getElementById("piercingNoteInput").value = getPiercingNote();
+        // Wedding package
+        const wp = getWeddingPackage();
+        document.getElementById("weddingFullDayPrice").value = wp.priceFullDay;
+        document.getElementById("weddingIntimatePrice").value = wp.priceIntimate;
+      }
+
+      // Patch renderAdmin to also render gallery + flash + pricing
+      const _origRenderAdmin = renderAdmin;
+      renderAdmin = function () {
+        _origRenderAdmin();
+        renderPortfolioAdmin();
+        renderFlashAdmin();
+        renderPricingAdmin();
+      };
+
+      // ── On load: pull all data from Firebase into localStorage, then render ──
+      async function initAdminData() {
+        const keys = [
+          "gypsyMarkets", "gypsyEvents",
+          "gypsyPortfolio", "gypsyFlash",
+          "gypsyPricing", "gypsyPiercingNote", "gypsyWeddingPackage",
+        ];
+        try {
+          await getAllData(keys); // populates localStorage from Firebase
+        } catch (err) {
+          console.warn("Firebase load failed, using local cache:", err);
+        }
+        renderAdmin();
+      }
+
+      // initAdminData() is called by onAuthStateChanged above when user is signed in
+    </script>
+  </body>
+</html>

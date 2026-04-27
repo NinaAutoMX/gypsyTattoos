@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gypsy Tattoo — About the Artist</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Almendra:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="admin-link-bar">
+      Owner? <a href="admin.html">Manage Portfolio →</a>
+    </div>
+
+    <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+    <nav class="sidebar" id="sidebar">
+      <button class="sidebar-close" onclick="closeSidebar()" aria-label="Close menu">✕</button>
+      <div class="sidebar-logo">
+        <img src="assets/logo.jpg" alt="Gypsy Tattoo logo" onerror="this.style.display='none'" />
+      </div>
+      <ul class="sidebar-links">
+        <li><a href="index.html">🏠 Home</a></li>
+        <li><a href="info.html" class="active">🎨 About Artist</a></li>
+        <li><a href="contact.html">✉️ Contact</a></li>
+        <li><a href="pricing.html">💳 Pricing</a></li>
+        <li><a href="markets.html">🛒 Markets &amp; Events</a></li>
+      </ul>
+      <div class="sidebar-social">
+        <p class="sidebar-social-label">Follow us</p>
+        <div class="social-icons">
+          <a href="https://www.facebook.com/share/1Ap2fsXKtE/" target="_blank" rel="noopener" aria-label="Facebook">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          </a>
+          <a href="https://www.instagram.com/gypsytattoosza?igsh=MWUyMXhrZ3Jjdm16ag==" target="_blank" rel="noopener" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+            </svg>
+          </a>
+          <a href="https://wa.me/27832794589" target="_blank" rel="noopener" aria-label="WhatsApp">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+          </a>
+          <a href="https://www.tiktok.com/@gypsytattoosza?_r=1&_t=ZS-95kQB00Ptwo" target="_blank" rel="noopener" aria-label="TikTok">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c1.1 0 2 .9 2 2v12.5c0 2.5-2 4.5-4.5 4.5S5 19 5 16.5c0-2.2 1.5-4 3.5-4.4V15c0 .8.7 1.5 1.5 1.5s1.5-.7 1.5-1.5V4c0-1.1.9-2 2-2h0zM16 4c.7.6 1.5 1 2.5 1h.5v2c-1.5 0-2.9-.5-4-1.3V4h1z"/></svg>
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <header class="site-header">
+      <button class="hamburger" id="menuBtn" onclick="toggleSidebar()" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="header-logo">
+        <img src="assets/logo.jpg" alt="Gypsy Tattoo" onerror="this.style.display='none'" />
+        <span class="brand-name">Gypsy Tattoo</span>
+      </div>
+      <a href="contact.html" class="header-cta">Contact Us</a>
+    </header>
+
+    <main>
+      <div class="artist-page">
+        <a href="index.html" class="back-link">← Back to Home</a>
+
+        <!-- ── ARTIST BIO ── -->
+        <div class="artist-bio">
+          <div class="artist-photo">
+            <img src="assets/artist.jpg" alt="Michelle Bosch" onerror="this.outerHTML='<div class=\'artist-photo-placeholder\'>🎨</div>'" />
+          </div>
+          <div class="artist-info">
+            <p class="artist-label">Meet the Artist</p>
+            <h1 class="artist-name">Michelle Bosch</h1>
+            <div class="artist-bio-text">
+              <p>
+                My life has always had meaning and purpose because of art and
+                creativity. Tattoo Artistry was the obvious decision,
+                starting with anime, movies, and media and then combining that
+                with the love of art history. My path started in art studies in
+                school, continued through film school, and finally brought me to
+                the tattoo industry.
+              </p>
+              <p>
+                My main styles: I love bold black and grey illustrative styles
+                mixed with abstract shapes and forms. However, I am also deeply
+                committed to continuously improving my skills and expanding my
+                expertise across a wide range of tattoo styles.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── PORTFOLIO ── -->
+        <section class="portfolio-section">
+          <div class="section-header">
+            <p class="section-eyebrow">Previous Work</p>
+            <h2 class="section-title">Portfolio</h2>
+            <div class="section-divider"></div>
+          </div>
+          <div class="gallery-grid" id="portfolioGrid"></div>
+        </section>
+
+        <!-- ── FLASH TATTOOS ── -->
+        <section class="flash-section">
+          <div class="section-header">
+            <p class="section-eyebrow">Ready to Book</p>
+            <h2 class="section-title">Flash Tattoos</h2>
+            <div class="section-divider"></div>
+          </div>
+          <div class="flash-grid" id="flashGrid"></div>
+        </section>
+
+        <a href="contact.html" class="btn btn-dark" style="display:inline-flex;margin-top:1rem">
+          Book a Session →
+        </a>
+      </div>
+
+      <!-- ── SOCIAL STRIP ── -->
+      <section class="social-strip">
+        <p>Stay connected with us</p>
+        <div class="social-icons large">
+          <a href="https://www.facebook.com/share/1Ap2fsXKtE/" target="_blank" rel="noopener" aria-label="Facebook">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            <span>Facebook</span>
+          </a>
+          <a href="https://www.instagram.com/gypsytattoosza?igsh=MWUyMXhrZ3Jjdm16ag==" target="_blank" rel="noopener" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+            </svg>
+            <span>Instagram</span>
+          </a>
+          <a href="https://wa.me/27832794589" target="_blank" rel="noopener" aria-label="WhatsApp">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+            <span>WhatsApp</span>
+          </a>
+          <a href="https://www.tiktok.com/@gypsytattoosza?_r=1&_t=ZS-95kQB00Ptwo" target="_blank" rel="noopener" aria-label="TikTok">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c1.1 0 2 .9 2 2v12.5c0 2.5-2 4.5-4.5 4.5S5 19 5 16.5c0-2.2 1.5-4 3.5-4.4V15c0 .8.7 1.5 1.5 1.5s1.5-.7 1.5-1.5V4c0-1.1.9-2 2-2h0zM16 4c.7.6 1.5 1 2.5 1h.5v2c-1.5 0-2.9-.5-4-1.3V4h1z"/></svg>
+            <span>TikTok</span>
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <!-- ── FOOTER ── -->
+    <footer class="site-footer">
+      <p>© 2026 Gypsy Tattoo · <a href="contact.html">Contact</a> · <a href="info.html">About</a></p>
+    </footer>
+
+    <!-- ── LIGHTBOX ── -->
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+      <button class="lightbox-close" onclick="closeLightbox()" aria-label="Close lightbox">✕</button>
+      <img id="lightboxImg" src="" alt="Portfolio image" />
+    </div>
+
+    <script src="script.js"></script>
+    <!-- Firebase DB layer — must load before inline script -->
+    <script src="firebase-db.js"></script>
+    <script>
+      function openLightbox(el) {
+        const img = el.querySelector("img");
+        if (!img) return;
+        document.getElementById("lightboxImg").src = img.src;
+        document.getElementById("lightbox").classList.add("open");
+      }
+      function closeLightbox() {
+        document.getElementById("lightbox").classList.remove("open");
+      }
+      // Close lightbox with Escape key
+      document.addEventListener("keydown", function(e) {
+        if (e.key === "Escape") closeLightbox();
+      });
+    </script>
+    <script>
+      function renderPortfolio() {
+        const grid = document.getElementById("portfolioGrid");
+        const imgs = JSON.parse(localStorage.getItem("gypsyPortfolio") || "[]");
+        if (!imgs.length) {
+          grid.innerHTML = `
+            <div class="gallery-item empty"><span>📷 Coming soon</span></div>
+            <div class="gallery-item empty"><span>📷 Coming soon</span></div>
+            <div class="gallery-item empty"><span>📷 Coming soon</span></div>`;
+          return;
+        }
+        grid.innerHTML = imgs.map(img => `
+          <div class="gallery-item" onclick="openLightbox(this)">
+            <img src="${img.src}" alt="Portfolio tattoo" loading="lazy" />
+          </div>`).join("");
+      }
+
+      function renderFlash() {
+        const grid = document.getElementById("flashGrid");
+        const flash = JSON.parse(localStorage.getItem("gypsyFlash") || "[]");
+        if (!flash.length) {
+          grid.innerHTML = `
+            <div class="flash-card"><div class="flash-card-img empty">⚡</div><div class="flash-card-body"><p class="flash-card-title">Coming Soon</p><p class="flash-card-tag">Available</p></div></div>
+            <div class="flash-card"><div class="flash-card-img empty">⚡</div><div class="flash-card-body"><p class="flash-card-title">Coming Soon</p><p class="flash-card-tag">Available</p></div></div>`;
+          return;
+        }
+        grid.innerHTML = flash.map(f => `
+          <div class="flash-card">
+            <div class="flash-card-img${f.src ? "" : " empty"}">
+              ${f.src ? `<img src="${f.src}" alt="${f.title}" loading="lazy" />` : "⚡"}
+            </div>
+            <div class="flash-card-body">
+              <p class="flash-card-title">${f.title}</p>
+              <p class="flash-card-tag">${f.tag ? f.tag + " · " : ""}${f.status || "Available"}</p>
+            </div>
+          </div>`).join("");
+      }
+
+      async function loadPortfolioAndFlash() {
+        // Render from localStorage immediately (instant, may be stale)
+        renderPortfolio();
+        renderFlash();
+
+        // Then fetch fresh data from Firebase and re-render
+        try {
+          await getAllData(["gypsyPortfolio", "gypsyFlash"]);
+          renderPortfolio();
+          renderFlash();
+        } catch (err) {
+          console.warn("Firebase fetch failed, showing cached data:", err);
+        }
+      }
+
+      loadPortfolioAndFlash();
+    </script>
+  </body>
+</html>

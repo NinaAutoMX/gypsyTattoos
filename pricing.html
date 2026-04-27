@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gypsy Tattoo — Pricing</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+     
+    </style>
+  </head>
+  <body>
+<div class="admin-link-bar">
+      Owner? <a href="admin.html">Manage Pricing →</a>
+    </div>
+
+    <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+    <nav class="sidebar" id="sidebar">
+      <button
+        class="sidebar-close"
+        onclick="closeSidebar()"
+        aria-label="Close menu"
+      >
+        ✕
+      </button>
+      <div class="sidebar-logo">
+        <img
+          src="assets/logo.jpg"
+          alt="Gypsy Tattoo logo"
+          onerror="this.style.display = 'none'"
+        />
+      </div>
+      <ul class="sidebar-links">
+        <li><a href="index.html">🏠 Home</a></li>
+        <li><a href="info.html" class="active">🎨 About Artist</a></li>
+        <li><a href="contact.html">📞 Contact</a></li>
+        <li><a href="pricing.html">💳 Pricing</a></li>
+        <li><a href="markets.html">🛒 Markets & Events</a></li>
+      </ul>
+      <div class="sidebar-social">
+        <p class="sidebar-social-label">Follow us</p>
+        <div class="social-icons">
+          <a
+            href="https://www.facebook.com/share/1Ap2fsXKtE/"
+            target="_blank"
+            rel="noopener"
+            aria-label="Facebook"
+          >
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"
+              />
+            </svg>
+          </a>
+          <a
+            href="https://www.instagram.com/gypsytattoosza?igsh=MWUyMXhrZ3Jjdm16ag=="
+            target="_blank"
+            rel="noopener"
+            aria-label="Instagram"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+            </svg>
+          </a>
+          <a
+            href="https://wa.me/27832794589"
+            target="_blank"
+            rel="noopener"
+            aria-label="WhatsApp"
+          >
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"
+              />
+            </svg>
+          </a>
+          <a
+            href="https://www.tiktok.com/@gypsytattoosza?_r=1&_t=ZS-95kQB00Ptwo"
+            target="_blank"
+            rel="noopener"
+            aria-label="TikTok"
+          >
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M12 2c1.1 0 2 .9 2 2v12.5c0 2.5-2 4.5-4.5 4.5S5 19 5 16.5c0-2.2 1.5-4 3.5-4.4V15c0 .8.7 1.5 1.5 1.5s1.5-.7 1.5-1.5V4c0-1.1.9-2 2-2h0zM16 4c.7.6 1.5 1 2.5 1h.5v2c-1.5 0-2.9-.5-4-1.3V4h1z"
+              />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <header class="site-header">
+      <button
+        class="hamburger"
+        id="menuBtn"
+        onclick="toggleSidebar()"
+        aria-label="Open menu"
+      >
+        <span></span><span></span><span></span>
+      </button>
+      <div class="header-logo">
+        <img
+          src="assets/logo.jpg"
+          alt="Gypsy Tattoo"
+          onerror="this.style.display = 'none'"
+        />
+        <span class="brand-name">Gypsy Tattoo</span>
+      </div>
+      <a href="contact.html" class="header-cta">Contact Us</a>
+    </header>
+
+    <main>
+      <div class="page-wrapper">
+        <a href="index.html" class="back-link">← Back to Home</a>
+        <h1 class="page-title">Pricing</h1>
+        <p class="page-subtitle">Tattoo & Piercing Price Lists.</p>
+
+        <div class="price-section">
+          <h2>Tattoo Price List</h2>
+          <table class="price-table" id="tattooTable"></table>
+          <p class="note">Prices may vary based on design complexity and placement</p>
+          <table class="extras" id="extrasTable"></table>
+        </div>
+
+        <div class="price-section">
+          <h2>Piercing Price List</h2>
+          <table class="price-table" id="piercingTable"></table>
+          <p id="piercingNote" style="margin-top:0.75rem;line-height:1.7"></p>
+        </div>
+
+        <div class="price-section wedding-package-section">
+          <h2>✧ Wedding &amp; Private Event Tattoo Service ✧</h2>
+          <p class="wedding-tagline">Mark the moment. Make it permanent.</p>
+          <p class="wedding-intro" id="weddingIntroText">Introduce a memorable element to your wedding day with a live tattoo service curated for you and your guests. Each piece is thoughtfully designed to reflect the intimacy and significance of your celebration.</p>
+
+          <div class="wedding-included" id="weddingIncludedBlock">
+            <p class="wedding-included-title">What's Included:</p>
+            <ul id="weddingIncludedList">
+              <li>A personalised pre-wedding consultation to develop your bespoke flash collection</li>
+              <li>A curated selection of exclusive, wedding-inspired designs</li>
+              <li>A professional studio setup brought to your venue</li>
+              <li>Live tattooing for you and your guests throughout your selected time</li>
+            </ul>
+          </div>
+
+          <div class="wedding-packages" id="weddingPackages">
+            <div class="wedding-package-card">
+              <div class="package-label">Full Day Booking</div>
+              <div class="package-hours">6 hours</div>
+              <div class="package-price" id="weddingPriceFullDay">R4,000.00</div>
+              <p class="package-note">A comprehensive service allowing for a relaxed, immersive flow throughout your celebration. Includes travel and administrative fees.</p>
+            </div>
+            <div class="wedding-package-card">
+              <div class="package-label">Intimate Booking</div>
+              <div class="package-hours">3 hours</div>
+              <div class="package-price" id="weddingPriceIntimate">R2,120.00</div>
+              <p class="package-note">Ideal for smaller, more personal gatherings, offering a focused and refined experience. Includes travel and administrative fees.</p>
+            </div>
+          </div>
+
+          <div class="wedding-payment-terms">
+            <p class="wedding-included-title">Payment Terms:</p>
+            <ul id="weddingPaymentList">
+              <li>A 30% non-refundable retainer is required to secure your date</li>
+              <li>The remaining balance is due 48–72 hours prior to your event</li>
+            </ul>
+            <p class="wedding-payment-note" id="weddingPaymentNote">Bookings are only confirmed once the retainer has been received. Dates are held exclusively and are not reserved without payment.</p>
+            <p class="wedding-closing" id="weddingClosingText">Each booking is approached with a commitment to detail, artistry, and a calm, professional presence—ensuring your guests feel both comfortable and cared for.</p>
+          </div>
+
+          <p class="wedding-enquire">Enquire to reserve your date.</p>
+        </div>
+
+        <div class="price-section">
+          <h2>Travel Fee</h2>
+          <table class="price-table" id="travelTable"></table>
+        </div>
+
+        <a
+          href="contact.html"
+          class="btn btn-primary"
+          style="display: inline-flex; margin-top: 1rem"
+          >Get in Touch →</a
+        >
+      </div>
+    </main>
+
+  <section class="social-strip">
+        <p>Stay connected with us</p>
+        <div class="social-icons large">
+          <a
+            href="https://www.facebook.com/share/1Ap2fsXKtE/"
+            target="_blank"
+            rel="noopener"
+            aria-label="Facebook"
+          >
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"
+              />
+            </svg>
+            <span>Facebook</span>
+          </a>
+          <a
+            href="https://www.instagram.com/gypsytattoosza?igsh=MWUyMXhrZ3Jjdm16ag=="
+            target="_blank"
+            rel="noopener"
+            aria-label="Instagram"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+            </svg>
+            <span>Instagram</span>
+          </a>
+          <a
+            href="https://wa.me/27832794589"
+            target="_blank"
+            rel="noopener"
+            aria-label="WhatsApp"
+          >
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"
+              />
+            </svg>
+            <span>WhatsApp</span>
+          </a>
+          <a
+            href="https://www.tiktok.com/@gypsytattoosza?_r=1&_t=ZS-95kQB00Ptwo"
+            target="_blank"
+            rel="noopener"
+            aria-label="TikTok"
+          >
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M12 2c1.1 0 2 .9 2 2v12.5c0 2.5-2 4.5-4.5 4.5S5 19 5 16.5c0-2.2 1.5-4 3.5-4.4V15c0 .8.7 1.5 1.5 1.5s1.5-.7 1.5-1.5V4c0-1.1.9-2 2-2h0zM16 4c.7.6 1.5 1 2.5 1h.5v2c-1.5 0-2.9-.5-4-1.3V4h1z"
+              />
+            </svg>
+            <span>tiktok</span>
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <!-- ── FOOTER ── -->
+    <footer class="site-footer">
+      <p>
+        © 2026 Gypsy Tattoo · <a href="contact.html">Contact</a> ·
+        <a href="info.html">About</a>
+      </p>
+    </footer>
+
+    <!-- Firebase DB layer — must load before inline script -->
+    <script src="firebase-db.js"></script>
+    <script>
+      const PRICING_DEFAULTS = {
+        tattoo: [
+          { id:"t1", desc:"1.5 x 1.5cm",         price:"R300.00" },
+          { id:"t2", desc:"2 x 2cm",              price:"R360.00" },
+          { id:"t3", desc:"3 x 3cm",              price:"R420.00" },
+          { id:"t4", desc:"4 x 4cm",              price:"R480.00" },
+          { id:"t5", desc:"5 x 5cm",              price:"R540.00" },
+          { id:"t6", desc:"Bigger than 5 x 5cm",  price:"R540.00/hr" },
+        ],
+        extras: [
+          { id:"e1", desc:"+ Colouring", price:"+ R100.00" },
+          { id:"e2", desc:"+ Shading",   price:"+ R100.00" },
+        ],
+        piercing: [
+          { id:"p1", desc:"Single Piercing", price:"R300.00" },
+          { id:"p2", desc:"Both Ears",       price:"R450.00" },
+        ],
+        travel: [
+          { id:"v1", desc:"Call-out Travel Fee", price:"R200.00" },
+        ],
+      };
+      const WEDDING_DEFAULTS = {
+        priceFullDay: "R4,000.00",
+        priceIntimate: "R2,120.00",
+      };
+      const PIERCING_NOTE_DEFAULT =
+        "Piercing includes the following:<br>• Piercing Service (Needle procedure).<br>• Standard Jewellery (You cannot bring your own jewellery).<br>• Numbing is included. (Bactine Spray.)";
+
+      function getPricing() {
+        const s = localStorage.getItem("gypsyPricing");
+        return s ? JSON.parse(s) : JSON.parse(JSON.stringify(PRICING_DEFAULTS));
+      }
+
+      function renderTable(tableId, rows) {
+        const t = document.getElementById(tableId);
+        if (!t) return;
+        t.innerHTML = rows.map(r => `<tr><td>${r.desc}</td><td>${r.price}</td></tr>`).join("");
+      }
+
+      function renderPricing() {
+        const p = getPricing();
+        renderTable("tattooTable",   p.tattoo   || []);
+        renderTable("extrasTable",   p.extras   || []);
+        renderTable("piercingTable", p.piercing || []);
+        renderTable("travelTable",   p.travel   || []);
+
+        const storedWedding = localStorage.getItem("gypsyWeddingPackage");
+        const wp = storedWedding ? JSON.parse(storedWedding) : WEDDING_DEFAULTS;
+        const fdEl  = document.getElementById("weddingPriceFullDay");
+        const intEl = document.getElementById("weddingPriceIntimate");
+        if (fdEl)  fdEl.textContent  = wp.priceFullDay  || WEDDING_DEFAULTS.priceFullDay;
+        if (intEl) intEl.textContent = wp.priceIntimate || WEDDING_DEFAULTS.priceIntimate;
+
+        const noteEl = document.getElementById("piercingNote");
+        if (noteEl) {
+          const raw = localStorage.getItem("gypsyPiercingNote") || PIERCING_NOTE_DEFAULT;
+          noteEl.innerHTML = raw.replace(/\n/g, "<br>");
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", async function () {
+        // Render from localStorage immediately (instant, may be stale)
+        renderPricing();
+
+        // Then fetch fresh data from Firebase and re-render
+        try {
+          await getAllData(["gypsyPricing", "gypsyPiercingNote", "gypsyWeddingPackage"]);
+          renderPricing(); // re-render with Firebase data now in localStorage
+        } catch (err) {
+          console.warn("Firebase fetch failed, showing cached data:", err);
+        }
+      });
+    </script>
+    <script src="script.js"></script>
+  </body>
+</html>
