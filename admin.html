@@ -39,7 +39,7 @@
           Incorrect email or password. Please try again.
         </div>
         <div class="login-hint">
-          Login is managed securely via Firebase Authentication.
+          Owner access only.
         </div>
       </div>
     </div>
@@ -397,32 +397,33 @@
 
     <!-- Firebase DB layer — must load before inline script -->
     <script src="firebase-db.js"></script>
-    <!-- Firebase Auth compat SDK -->
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+    <!-- Admin credentials — this file is gitignored and never pushed to GitHub -->
+    <script src="admin-config.js"></script>
 
     <script>
-      // ── Auth (Firebase Authentication — no password stored in code) ──
+      // ── Simple session-based login (no Firebase Auth dependency) ──
+      // ADMIN_EMAIL and ADMIN_PASSWORD are loaded from admin-config.js
 
-      function _waitForAuth(attempts = 0) {
-        return new Promise((resolve, reject) => {
-          if (typeof firebase !== "undefined" && firebase.auth) { resolve(); return; }
-          if (attempts > 40) { reject(new Error("Firebase Auth SDK not loaded.")); return; }
-          setTimeout(() => _waitForAuth(attempts + 1).then(resolve).catch(reject), 100);
-        });
+      const SESSION_KEY = "gypsyAdminSession";
+
+      function isLoggedIn() {
+        return sessionStorage.getItem(SESSION_KEY) === "true";
       }
 
-      // Restore session if still signed in
-      _waitForAuth().then(() => {
-        firebase.auth().onAuthStateChanged((user) => {
-          if (user) {
-            document.getElementById("loginScreen").classList.add("hidden");
-            document.getElementById("adminApp").classList.add("visible");
-            initAdminData();
-          }
-        });
+      // Restore session on page load
+      window.addEventListener("DOMContentLoaded", () => {
+        if (isLoggedIn()) {
+          showAdminApp();
+        }
       });
 
-      async function doLogin() {
+      function showAdminApp() {
+        document.getElementById("loginScreen").classList.add("hidden");
+        document.getElementById("adminApp").classList.add("visible");
+        initAdminData();
+      }
+
+      function doLogin() {
         const email = document.getElementById("loginEmail").value.trim();
         const pass  = document.getElementById("loginPass").value;
         const errEl = document.getElementById("loginError");
@@ -434,26 +435,21 @@
           return;
         }
 
-        btn.disabled = true;
-        btn.textContent = "Signing in…";
-        errEl.style.display = "none";
-
-        try {
-          await _waitForAuth();
-          await firebase.auth().signInWithEmailAndPassword(email, pass);
-          // onAuthStateChanged above will reveal the admin app
-        } catch (err) {
+        if (email === ADMIN_EMAIL && pass === ADMIN_PASSWORD) {
+          sessionStorage.setItem(SESSION_KEY, "true");
+          errEl.style.display = "none";
+          showAdminApp();
+        } else {
           errEl.style.display = "block";
           errEl.textContent = "Incorrect email or password. Please try again.";
           document.getElementById("loginPass").value = "";
           document.getElementById("loginPass").focus();
-          btn.disabled = false;
-          btn.textContent = "Sign In";
         }
       }
 
       function logout() {
-        firebase.auth().signOut().then(() => location.reload());
+        sessionStorage.removeItem(SESSION_KEY);
+        location.reload();
       }
 
       // ── Data helpers (now async — backed by Firebase) ──
