@@ -1,12 +1,14 @@
 // ─────────────────────────────────────────────────────────────
 //  firebase-db.js  –  Gypsy Tattoo shared database layer
 //
-//  Uses the Firebase CDN compat SDK (no build step needed).
-//  Admin writes here → all visitors read the same data instantly.
+//  Firestore  → stores all data (markets, events, pricing, image URLs)
+//  Cloudinary → stores the actual image files (free, no billing needed)
 //
-//  HOW TO CONFIGURE:
-//  1. Replace the values in FIREBASE_CONFIG below with your real
-//     Firebase project credentials (see setup guide).
+//  SETUP:
+//  1. Sign up free at cloudinary.com
+//  2. Copy your Cloud name from the Dashboard → paste below
+//  3. Go to Settings → Upload → Add upload preset
+//     Set Signing mode = Unsigned, name it "gypsytattoo" → Save
 // ─────────────────────────────────────────────────────────────
 
 const FIREBASE_CONFIG = {
@@ -18,6 +20,10 @@ const FIREBASE_CONFIG = {
   appId:             "1:579547714873:web:ebed9234d4cae2351484e8",
 };
 
+// ── Cloudinary config ─────────────────────────────────────────
+const CLOUDINARY_CLOUD_NAME    = "dhvdekbua"; // ← paste your cloud name here
+const CLOUDINARY_UPLOAD_PRESET = "gypsytattoo";     // ← must match your preset name
+
 // ── Load Firebase compat SDK from CDN ────────────────────────
 (function loadFirebase() {
   const scripts = [
@@ -27,7 +33,7 @@ const FIREBASE_CONFIG = {
   scripts.forEach((src) => {
     const s = document.createElement("script");
     s.src = src;
-    s.async = false; // keep load order
+    s.async = false;
     document.head.appendChild(s);
   });
 })();
@@ -58,7 +64,61 @@ function _waitForSDK(attempts = 0) {
   });
 }
 
-// ── Public API ────────────────────────────────────────────────
+// ── Cloudinary image upload ───────────────────────────────────
+
+/**
+ * Upload a File to Cloudinary (free, no billing required).
+ * Returns the secure public URL of the uploaded image.
+ *
+ * @param {File}     file       — raw File from <input type="file">
+ * @param {string}   folder     — "portfolio" or "flash"
+ * @param {function} onProgress — optional callback(percent 0–100)
+ * @returns {Promise<string>}   secure image URL
+ */
+async function uploadImage(file, folder, onProgress) {
+  if (CLOUDINARY_CLOUD_NAME === "YOUR_CLOUD_NAME") {
+    throw new Error("Cloudinary not configured — please set CLOUDINARY_CLOUD_NAME in firebase-db.js");
+  }
+
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+  formData.append("folder", "gypsytattoo/" + folder);
+
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`);
+
+    if (onProgress) {
+      xhr.upload.onprogress = (e) => {
+        if (e.lengthComputable) onProgress(Math.round((e.loaded / e.total) * 100));
+      };
+    }
+
+    xhr.onload = () => {
+      if (xhr.status === 200) {
+        const data = JSON.parse(xhr.responseText);
+        resolve(data.secure_url);
+      } else {
+        reject(new Error("Cloudinary upload failed: " + xhr.responseText));
+      }
+    };
+
+    xhr.onerror = () => reject(new Error("Network error during upload."));
+    xhr.send(formData);
+  });
+}
+
+/**
+ * Cloudinary deletion from the browser requires a secret key so we skip it.
+ * The URL is removed from Firestore so the image won't show — the file stays
+ * on Cloudinary but the free tier has 25GB so this is fine in practice.
+ */
+async function deleteImage(url) {
+  return Promise.resolve();
+}
+
+// ── Public Firestore API ──────────────────────────────────────
 const DB_COLLECTION = "gypsyData";
 
 /**
@@ -73,10 +133,9 @@ async function getData(key) {
     const doc = await db.collection(DB_COLLECTION).doc(key).get();
     if (doc.exists) {
       const val = doc.data().value;
-      localStorage.setItem(key, JSON.stringify(val)); // keep cache fresh
+      localStorage.setItem(key, JSON.stringify(val));
       return val;
     }
-    // Document doesn't exist yet — return local cache or empty array
     const local = localStorage.getItem(key);
     return local ? JSON.parse(local) : [];
   } catch (err) {
@@ -92,7 +151,6 @@ async function getData(key) {
  * @param {any} val
  */
 async function setData(key, val) {
-  // Write locally first for instant feedback
   localStorage.setItem(key, JSON.stringify(val));
   try {
     await _waitForSDK();
@@ -100,13 +158,12 @@ async function setData(key, val) {
     await db.collection(DB_COLLECTION).doc(key).set({ value: val });
   } catch (err) {
     console.error("[firebase-db] setData error:", err);
-    throw err; // re-throw so admin can show a toast
+    throw err;
   }
 }
 
 /**
  * Load multiple keys in parallel from Firestore.
- * Populates localStorage as a side-effect, then returns all values.
  * @param {string[]} keys
  * @returns {Promise<Object>}
  */
