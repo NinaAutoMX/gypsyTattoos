@@ -660,34 +660,40 @@
         await setData("gypsyPortfolio", v);
       }
 
+      // Compress an image file to a base64 JPEG under ~200KB
+      function compressImage(file, maxWidth = 1200, quality = 0.75) {
+        return new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onload = (ev) => {
+            const img = new Image();
+            img.onload = () => {
+              const canvas = document.createElement("canvas");
+              let w = img.width, h = img.height;
+              if (w > maxWidth) { h = Math.round(h * maxWidth / w); w = maxWidth; }
+              canvas.width = w; canvas.height = h;
+              canvas.getContext("2d").drawImage(img, 0, 0, w, h);
+              resolve(canvas.toDataURL("image/jpeg", quality));
+            };
+            img.src = ev.target.result;
+          };
+          reader.readAsDataURL(file);
+        });
+      }
+
       function handlePortfolioUpload(e) {
         const files = Array.from(e.target.files);
         if (!files.length) return;
-        let loaded = 0;
-        files.forEach((file) => {
-          const reader = new FileReader();
-          reader.onload = async (ev) => {
-            const imgs = getPortfolioImgs();
-            imgs.push({
-              id: Date.now().toString() + Math.random(),
-              src: ev.target.result,
-            });
-            loaded++;
-            if (loaded === files.length) {
-              showToast("⏳ Uploading " + files.length + " image(s)…");
-              try {
-                await setPortfolioImgs(imgs);
-                renderPortfolioAdmin();
-                showToast("✅ " + files.length + " image(s) uploaded!");
-              } catch {
-                showToast("❌ Upload failed — images may be too large for free Firebase tier.");
-              }
-            } else {
-              // intermediate — just update local
-              localStorage.setItem("gypsyPortfolio", JSON.stringify(imgs));
-            }
-          };
-          reader.readAsDataURL(file);
+        showToast("⏳ Compressing & uploading " + files.length + " image(s)…");
+        Promise.all(files.map(f => compressImage(f))).then(async (compressed) => {
+          const imgs = getPortfolioImgs();
+          compressed.forEach(src => imgs.push({ id: Date.now().toString() + Math.random(), src }));
+          try {
+            await setPortfolioImgs(imgs);
+            renderPortfolioAdmin();
+            showToast("✅ " + files.length + " image(s) uploaded!");
+          } catch {
+            showToast("❌ Upload failed — try fewer images at once or use smaller files.");
+          }
         });
         e.target.value = "";
       }
@@ -802,12 +808,10 @@
       function handleFlashImgSelect(e) {
         const file = e.target.files[0];
         if (!file) return;
-        const reader = new FileReader();
-        reader.onload = (ev) => {
-          flashImgData = ev.target.result;
-          showFlashImgPreview(ev.target.result);
-        };
-        reader.readAsDataURL(file);
+        compressImage(file).then(src => {
+          flashImgData = src;
+          showFlashImgPreview(src);
+        });
       }
 
       function showFlashImgPreview(src) {
