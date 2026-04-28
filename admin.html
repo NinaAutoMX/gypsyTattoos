@@ -660,40 +660,32 @@
         await setData("gypsyPortfolio", v);
       }
 
-      // Compress an image file to a base64 JPEG under ~200KB
-      function compressImage(file, maxWidth = 1200, quality = 0.75) {
-        return new Promise((resolve) => {
-          const reader = new FileReader();
-          reader.onload = (ev) => {
-            const img = new Image();
-            img.onload = () => {
-              const canvas = document.createElement("canvas");
-              let w = img.width, h = img.height;
-              if (w > maxWidth) { h = Math.round(h * maxWidth / w); w = maxWidth; }
-              canvas.width = w; canvas.height = h;
-              canvas.getContext("2d").drawImage(img, 0, 0, w, h);
-              resolve(canvas.toDataURL("image/jpeg", quality));
-            };
-            img.src = ev.target.result;
-          };
-          reader.readAsDataURL(file);
-        });
-      }
-
       function handlePortfolioUpload(e) {
         const files = Array.from(e.target.files);
         if (!files.length) return;
-        showToast("⏳ Compressing & uploading " + files.length + " image(s)…");
-        Promise.all(files.map(f => compressImage(f))).then(async (compressed) => {
+        showToast("⏳ Uploading " + files.length + " image(s) to Storage…");
+        let done = 0;
+        Promise.all(
+          files.map(async (file) => {
+            const url = await uploadImage(file, "portfolio", (pct) => {
+              showToast(`⏳ Uploading… ${pct}%`);
+            });
+            done++;
+            showToast(`⏳ Uploaded ${done} / ${files.length}…`);
+            return { id: Date.now().toString() + Math.random(), src: url };
+          })
+        ).then(async (newImgs) => {
           const imgs = getPortfolioImgs();
-          compressed.forEach(src => imgs.push({ id: Date.now().toString() + Math.random(), src }));
+          newImgs.forEach(img => imgs.push(img));
           try {
             await setPortfolioImgs(imgs);
             renderPortfolioAdmin();
             showToast("✅ " + files.length + " image(s) uploaded!");
           } catch {
-            showToast("❌ Upload failed — try fewer images at once or use smaller files.");
+            showToast("❌ Failed to save image list.");
           }
+        }).catch(() => {
+          showToast("❌ Upload failed — check your internet connection.");
         });
         e.target.value = "";
       }
@@ -762,11 +754,13 @@
       }
 
       let flashEditId = null;
-      let flashImgData = null;
+      let flashImgData = null;  // existing URL (when editing)
+      let flashImgFile = null;  // new File to upload (when a new image is picked)
 
       function openFlashModal(id = null) {
         flashEditId = id;
         flashImgData = null;
+        flashImgFile = null;
         const isEdit = id !== null;
         document.getElementById("flashModalTitle").textContent = isEdit
           ? "Edit Flash Tattoo"
@@ -808,10 +802,11 @@
       function handleFlashImgSelect(e) {
         const file = e.target.files[0];
         if (!file) return;
-        compressImage(file).then(src => {
-          flashImgData = src;
-          showFlashImgPreview(src);
-        });
+        // Store the raw File for upload on save; show local preview immediately
+        flashImgFile = file;
+        const reader = new FileReader();
+        reader.onload = (ev) => showFlashImgPreview(ev.target.result);
+        reader.readAsDataURL(file);
       }
 
       function showFlashImgPreview(src) {
@@ -831,17 +826,28 @@
           return;
         }
 
+        closeFlashModal();
+        showToast("⏳ Saving…");
+
+        // If a new image file was selected, upload it to Storage first
+        let imgUrl = flashImgData || (flashEditId ? (getFlash().find(f => f.id === flashEditId) || {}).src : null) || null;
+        if (flashImgFile) {
+          try {
+            imgUrl = await uploadImage(flashImgFile, "flash", (pct) => {
+              showToast(`⏳ Uploading image… ${pct}%`);
+            });
+          } catch {
+            showToast("❌ Image upload failed — check your connection.");
+            return;
+          }
+        }
+
         const entry = {
           id: flashEditId || Date.now().toString(),
           title,
           tag: document.getElementById("ff-tag").value.trim(),
           status: document.getElementById("ff-status").value,
-          src:
-            flashImgData ||
-            (flashEditId
-              ? (getFlash().find((f) => f.id === flashEditId) || {}).src
-              : null) ||
-            null,
+          src: imgUrl,
         };
 
         let list = getFlash();
@@ -852,8 +858,6 @@
           list.push(entry);
         }
 
-        closeFlashModal();
-        showToast("⏳ Saving…");
         try {
           await setFlash(list);
           showToast(wasEdit ? "✅ Flash updated!" : "✅ Flash added!");
