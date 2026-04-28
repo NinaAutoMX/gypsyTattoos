@@ -496,7 +496,7 @@
 
         if (isEdit) {
           const key = type === "market" ? "gypsyMarkets" : "gypsyEvents";
-          const item = getData(key).find((e) => e.id === id);
+          const item = getDataSync(key).find((e) => e.id === id);
           if (item) {
             document.getElementById("f-name").value = item.name || "";
             document.getElementById("f-date").value = item.date || "";
