@@ -8,8 +8,8 @@
 //  Row Level Security rules in supabase-schema.sql, not from hiding it.
 //  NEVER put the "service_role" key in this file.
 // ─────────────────────────────────────────────────────────────
-const SUPABASE_URL      = "https://YOUR-PROJECT-ID.supabase.co"; // ← Project Settings → API
-const SUPABASE_ANON_KEY = "YOUR-ANON-PUBLIC-KEY";                // ← "anon public" key
+const SUPABASE_URL      = "https://rtqrpuzgqzmocznfgcun.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ0cXJwdXpncXptb2N6bmZnY3VuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTU1Njk2NTUsImV4cCI6MjExMTE0NTY1NX0.H_5JnvaPz4AJBrCytye26cj3BSWbvkXOrZGkfPpfyW8";
 
 const CLOUDINARY_CLOUD_NAME    = "dhvdekbua";
 const CLOUDINARY_UPLOAD_PRESET = "gypsytattoo";
