@@ -245,14 +245,6 @@
           </table>
         </div>
 
-        <hr class="divider" />
-        <div class="section-header"><h2 class="section-title">💾 Backup &amp; Import</h2></div>
-        <div class="pricing-block">
-          <button class="save-btn" onclick="exportBackup()">Download backup (JSON)</button>
-          <p style="margin:1rem 0 .5rem">Import (paste a backup here to restore or migrate data):</p>
-          <textarea id="importBox" rows="4" style="width:100%" placeholder='{"gypsyMarkets":[...]}'></textarea>
-          <button class="save-btn" style="margin-top:.5rem" onclick="importBackup()">Import</button>
-        </div>
       </div>
     </div>
 
@@ -1150,7 +1142,6 @@
       }
 
       // ── Bookings & calendar ──
-      const BACKUP_KEYS = ["gypsyMarkets","gypsyEvents","gypsyPortfolio","gypsyFlash","gypsyPricing","gypsyPiercingNote","gypsyWeddingPackage","gypsyCalendar"];
       let requests = [];
 
       function getCal() {
@@ -1225,22 +1216,6 @@
         if (!confirm("Delete this request permanently?")) return;
         try { await deleteBookingRequest(id); showToast("🗑 Deleted."); } catch { showToast("❌ Failed."); }
         loadRequests();
-      }
-
-      // ── Backup / import ──
-      function exportBackup() {
-        const out = {}; BACKUP_KEYS.forEach((k) => { out[k] = getDataSync(k); });
-        const a = document.createElement("a");
-        a.href = URL.createObjectURL(new Blob([JSON.stringify(out, null, 2)], { type: "application/json" }));
-        a.download = "gypsy-backup-" + new Date().toISOString().slice(0, 10) + ".json"; a.click();
-      }
-      async function importBackup() {
-        let obj; try { obj = JSON.parse(document.getElementById("importBox").value); } catch { showToast("⚠️ That isn't valid JSON."); return; }
-        const keys = Object.keys(obj).filter((k) => BACKUP_KEYS.includes(k) && obj[k] != null);
-        if (!keys.length) { showToast("⚠️ Nothing to import."); return; }
-        if (!confirm("Import " + keys.length + " section(s)? This overwrites the current data for them.")) return;
-        try { for (const k of keys) await setData(k, obj[k]); showToast("✅ Imported."); renderAdmin(); }
-        catch { showToast("❌ Import failed — are you signed in?"); }
       }
 
       // Patch renderAdmin to also render gallery + flash + pricing
