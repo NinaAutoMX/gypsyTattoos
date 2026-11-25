@@ -266,7 +266,9 @@
         document.getElementById("successMsg").style.display = "block";
       } catch (err) {
         btn.disabled = false; btn.textContent = "Send Booking Request";
-        alert(String(err.message || "").includes("Too many") ? err.message : "Sorry, that didn't go through. Please try WhatsApp instead.");
+        console.error("Booking error:", err);
+        const m = String((err && err.message) || "");
+        alert(m.includes("Too many") ? m : "Sorry, that didn't go through. Please try WhatsApp instead.\n\n(Technical detail: " + m.slice(0, 160) + ")");
       }
     });
 
