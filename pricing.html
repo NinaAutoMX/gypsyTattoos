@@ -4,10 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Gypsy Tattoo — Pricing</title>
+    <meta name="description" content="Gypsy Tattoo - independent travelling tattoo and piercing studio. Book a session, see pricing, markets and events." />
+    <meta name="theme-color" content="#301854" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" href="assets/icon-192.png" />
+    <link rel="apple-touch-icon" href="assets/icon-180.png" />
     <link rel="stylesheet" href="style.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
-      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Almendra:wght@400;700&display=swap"
       rel="stylesheet"
     />
     <style>
@@ -42,6 +47,7 @@
         <li><a href="contact.html">📞 Contact</a></li>
         <li><a href="pricing.html">💳 Pricing</a></li>
         <li><a href="markets.html">🛒 Markets & Events</a></li>
+        <li><a href="booking.html">📅 Book a Session</a></li>
       </ul>
       <div class="sidebar-social">
         <p class="sidebar-social-label">Follow us</p>
@@ -275,8 +281,9 @@
       </p>
     </footer>
 
-    <!-- Firebase DB layer — must load before inline script -->
-    <script src="firebase-db.js"></script>
+    <!-- Database layer (Supabase) -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+    <script src="supabase-db.js"></script>
     <script>
       const PRICING_DEFAULTS = {
         tattoo: [
@@ -304,7 +311,7 @@
         priceIntimate: "R2,120.00",
       };
       const PIERCING_NOTE_DEFAULT =
-        "Piercing includes the following:<br>• Piercing Service (Needle procedure).<br>• Standard Jewellery (You cannot bring your own jewellery).<br>• Numbing is included. (Bactine Spray.)";
+        "Piercing includes the following:\n• Piercing Service (Needle procedure).\n• Standard Jewellery (You cannot bring your own jewellery).\n• Numbing is included. (Bactine Spray.)";
 
       function getPricing() {
         const s = localStorage.getItem("gypsyPricing");
@@ -314,7 +321,7 @@
       function renderTable(tableId, rows) {
         const t = document.getElementById(tableId);
         if (!t) return;
-        t.innerHTML = rows.map(r => `<tr><td>${r.desc}</td><td>${r.price}</td></tr>`).join("");
+        t.innerHTML = rows.map(r => `<tr><td>${esc(r.desc)}</td><td>${esc(r.price)}</td></tr>`).join("");
       }
 
       function renderPricing() {
@@ -334,7 +341,7 @@
         const noteEl = document.getElementById("piercingNote");
         if (noteEl) {
           const raw = localStorage.getItem("gypsyPiercingNote") || PIERCING_NOTE_DEFAULT;
-          noteEl.innerHTML = raw.replace(/\n/g, "<br>");
+          noteEl.innerHTML = esc(raw).replace(/\n/g, "<br>");
         }
       }
 
@@ -342,12 +349,12 @@
         // Render from localStorage immediately (instant, may be stale)
         renderPricing();
 
-        // Then fetch fresh data from Firebase and re-render
+        // Then fetch fresh data from database and re-render
         try {
           await getAllData(["gypsyPricing", "gypsyPiercingNote", "gypsyWeddingPackage"]);
-          renderPricing(); // re-render with Firebase data now in localStorage
+          renderPricing(); // re-render with database data now in localStorage
         } catch (err) {
-          console.warn("Firebase fetch failed, showing cached data:", err);
+          console.warn("database fetch failed, showing cached data:", err);
         }
       });
     </script>

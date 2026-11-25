@@ -4,6 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Gypsy Tattoo — About the Artist</title>
+    <meta name="description" content="Gypsy Tattoo - independent travelling tattoo and piercing studio. Book a session, see pricing, markets and events." />
+    <meta name="theme-color" content="#301854" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" href="assets/icon-192.png" />
+    <link rel="apple-touch-icon" href="assets/icon-180.png" />
     <link rel="stylesheet" href="style.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
@@ -29,6 +34,7 @@
         <li><a href="contact.html">✉️ Contact</a></li>
         <li><a href="pricing.html">💳 Pricing</a></li>
         <li><a href="markets.html">🛒 Markets &amp; Events</a></li>
+        <li><a href="booking.html">📅 Book a Session</a></li>
       </ul>
       <div class="sidebar-social">
         <p class="sidebar-social-label">Follow us</p>
@@ -160,8 +166,9 @@
     </div>
 
     <script src="script.js"></script>
-    <!-- Firebase DB layer — must load before inline script -->
-    <script src="firebase-db.js"></script>
+    <!-- Database layer (Supabase) -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+    <script src="supabase-db.js"></script>
     <script>
       function openLightbox(el) {
         const img = el.querySelector("img");
@@ -190,7 +197,7 @@
         }
         grid.innerHTML = imgs.map(img => `
           <div class="gallery-item" onclick="openLightbox(this)">
-            <img src="${img.src}" alt="Portfolio tattoo" loading="lazy" />
+            <img src="${esc(img.src)}" alt="Portfolio tattoo" loading="lazy" />
           </div>`).join("");
       }
 
@@ -206,11 +213,11 @@
         grid.innerHTML = flash.map(f => `
           <div class="flash-card">
             <div class="flash-card-img${f.src ? "" : " empty"}">
-              ${f.src ? `<img src="${f.src}" alt="${f.title}" loading="lazy" />` : "⚡"}
+              ${f.src ? `<img src="${esc(f.src)}" alt="${esc(f.title)}" loading="lazy" />` : "⚡"}
             </div>
             <div class="flash-card-body">
-              <p class="flash-card-title">${f.title}</p>
-              <p class="flash-card-tag">${f.tag ? f.tag + " · " : ""}${f.status || "Available"}</p>
+              <p class="flash-card-title">${esc(f.title)}</p>
+              <p class="flash-card-tag">${f.tag ? esc(f.tag) + " · " : ""}${esc(f.status || "Available")}</p>
             </div>
           </div>`).join("");
       }
@@ -220,13 +227,13 @@
         renderPortfolio();
         renderFlash();
 
-        // Then fetch fresh data from Firebase and re-render
+        // Then fetch fresh data from database and re-render
         try {
           await getAllData(["gypsyPortfolio", "gypsyFlash"]);
           renderPortfolio();
           renderFlash();
         } catch (err) {
-          console.warn("Firebase fetch failed, showing cached data:", err);
+          console.warn("database fetch failed, showing cached data:", err);
         }
       }
 

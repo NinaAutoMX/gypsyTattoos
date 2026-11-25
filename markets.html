@@ -4,10 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Gypsy Tattoo — Markets & Events</title>
+    <meta name="description" content="Gypsy Tattoo - independent travelling tattoo and piercing studio. Book a session, see pricing, markets and events." />
+    <meta name="theme-color" content="#301854" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" href="assets/icon-192.png" />
+    <link rel="apple-touch-icon" href="assets/icon-180.png" />
     <link rel="stylesheet" href="style.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
-      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Almendra:wght@400;700&display=swap"
       rel="stylesheet"
     />
     <style>
@@ -43,6 +48,7 @@
         <li><a href="contact.html">✉️ Contact</a></li>
         <li><a href="pricing.html">💳 Pricing</a></li>
         <li><a href="markets.html" class="active">🛒 Markets & Events</a></li>
+        <li><a href="booking.html">📅 Book a Session</a></li>
 
       </ul>
       <div class="sidebar-social">
@@ -152,7 +158,7 @@
           <div class="entry-grid" id="events-list"></div>
         </div>
       </div>
-    </main>
+    
 
     <section class="social-strip">
         <p>Stay connected with us</p>
@@ -229,8 +235,9 @@
     </footer>
 
     <script src="script.js"></script>
-    <!-- Firebase DB layer — must load before inline script -->
-    <script src="firebase-db.js"></script>
+    <!-- Database layer (Supabase) -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+    <script src="supabase-db.js"></script>
     <script>
       function switchTab(tab, btn) {
         document
@@ -287,13 +294,13 @@
             <div class="month">${d.month}</div>
           </div>
           <div class="entry-body">
-            <div class="entry-title">${e.name}</div>
+            <div class="entry-title">${esc(e.name)}</div>
             <div class="entry-meta">
               <span>📅 ${d.full}${endDate}</span>
-              ${e.location ? `<span>📍 ${e.location}</span>` : ""}
-              ${e.time ? `<span>🕐 ${e.time}</span>` : ""}
+              ${e.location ? `<span>📍 ${esc(e.location)}</span>` : ""}
+              ${e.time ? `<span>🕐 ${esc(e.time)}</span>` : ""}
             </div>
-            ${e.description ? `<div class="entry-desc">${e.description}</div>` : ""}
+            ${e.description ? `<div class="entry-desc">${esc(e.description)}</div>` : ""}
             <span class="tag ${type === "events" ? "event" : ""}">${type === "markets" ? "Market" : "Event"}</span>
           </div>
         </div>`;
@@ -308,13 +315,13 @@
         renderEntries(localMarkets, "markets-list", "markets");
         renderEntries(localEvents,  "events-list",  "events");
 
-        // Then fetch fresh data from Firebase and re-render
+        // Then fetch fresh data from database and re-render
         try {
           const data = await getAllData(["gypsyMarkets", "gypsyEvents"]);
           renderEntries(data.gypsyMarkets || [], "markets-list", "markets");
           renderEntries(data.gypsyEvents  || [], "events-list",  "events");
         } catch (err) {
-          console.warn("Firebase fetch failed, showing cached data:", err);
+          console.warn("database fetch failed, showing cached data:", err);
         }
       }
 

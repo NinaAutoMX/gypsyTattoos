@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gypsy Tattoo — Book a Session</title>
+    <meta name="description" content="Gypsy Tattoo - independent travelling tattoo and piercing studio. Book a session, see pricing, markets and events." />
+    <meta name="theme-color" content="#301854" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" href="assets/icon-192.png" />
+    <link rel="apple-touch-icon" href="assets/icon-180.png" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Almendra:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+  <nav class="sidebar" id="sidebar">
+    <button class="sidebar-close" onclick="closeSidebar()" aria-label="Close menu">✕</button>
+    <div class="sidebar-logo">
+      <img src="assets/logo.jpg" alt="Gypsy Tattoo logo" onerror="this.style.display='none'">
+    </div>
+    <ul class="sidebar-links">
+      <li><a href="index.html">🏠 Home</a></li>
+      <li><a href="info.html">🎨 About Artist</a></li>
+      <li><a href="contact.html">✉️ Contact</a></li>
+      <li><a href="pricing.html">💳 Pricing</a></li>
+      <li><a href="markets.html">🛒 Markets & Events</a></li>
+        <li><a href="booking.html" class="active">📅 Book a Session</a></li>
+    </ul>
+    <div class="sidebar-social">
+      <p class="sidebar-social-label">Follow us</p>
+      <div class="social-icons">
+        <a href="https://www.facebook.com/share/1Ap2fsXKtE/" target="_blank" rel="noopener" aria-label="Facebook">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+        </a>
+        <a href="https://www.instagram.com/gypsytattoosza?igsh=MWUyMXhrZ3Jjdm16ag==" target="_blank" rel="noopener" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+        </a>
+        <a href="https://wa.me/27832794589" target="_blank" rel="noopener" aria-label="WhatsApp">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+        </a>
+        <a href="https://www.tiktok.com/@gypsytattoosza?_r=1&_t=ZS-95kQB00Ptwo" target="_blank" rel="noopener" aria-label="TikTok">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c1.1 0 2 .9 2 2v12.5c0 2.5-2 4.5-4.5 4.5S5 19 5 16.5c0-2.2 1.5-4 3.5-4.4V15c0 .8.7 1.5 1.5 1.5s1.5-.7 1.5-1.5V4c0-1.1.9-2 2-2h0zM16 4c.7.6 1.5 1 2.5 1h.5v2c-1.5 0-2.9-.5-4-1.3V4h1z"/></svg>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="site-header">
+    <button class="hamburger" id="menuBtn" onclick="toggleSidebar()" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="header-logo">
+      <img src="assets/logo.jpg" alt="Gypsy Tattoo" onerror="this.style.display='none'">
+      <span class="brand-name">Gypsy Tattoo</span>
+    </div>
+    <a href="index.html" class="header-cta">← Home</a>
+  </header>
+
+  <main>
+    <div class="page-wrapper">
+      <a href="index.html" class="back-link">← Back to Home</a>
+      <h1 class="page-title">Book a Session</h1>
+      <p class="page-subtitle">Pick a day, choose morning or afternoon, and send a request. Your booking is only confirmed once approved.</p>
+
+      <div class="cal-legend">
+        <span><i class="dot free"></i>Free</span>
+        <span><i class="dot limited"></i>Limited</span>
+        <span><i class="dot booked"></i>Booked</span>
+        <span><i class="dot away"></i>Away / market</span>
+      </div>
+
+      <div class="cal">
+        <div class="cal-head">
+          <button type="button" class="cal-nav" id="calPrev" aria-label="Previous month">‹</button>
+          <h2 id="calTitle"></h2>
+          <button type="button" class="cal-nav" id="calNext" aria-label="Next month">›</button>
+        </div>
+        <div class="cal-grid cal-dow"><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div><div>Sun</div></div>
+        <div class="cal-grid" id="calGrid"></div>
+      </div>
+
+      <div id="successMsg" class="success-msg">✅ Request sent! You'll hear back once it has been reviewed.</div>
+
+      <form class="contact-form" id="bookForm" novalidate style="display:none">
+        <h3 class="book-picked" id="bookPicked"></h3>
+        <div class="slot-pick" id="slotPick"></div>
+        <div class="form-group"><label for="bName">Full Name</label><input type="text" id="bName" maxlength="100" required /></div>
+        <div class="form-group"><label for="bEmail">Email Address</label><input type="email" id="bEmail" maxlength="200" required /></div>
+        <div class="form-group"><label for="bPhone">Phone / WhatsApp</label><input type="tel" id="bPhone" maxlength="30" required /></div>
+        <div class="form-group"><label for="bSize">Approx. size <small>(optional)</small></label><input type="text" id="bSize" maxlength="100" placeholder="e.g. 5 x 5cm" /></div>
+        <div class="form-group"><label for="bPlace">Placement <small>(optional)</small></label><input type="text" id="bPlace" maxlength="100" placeholder="e.g. inner forearm" /></div>
+        <div class="form-group"><label for="bIdea">Your idea</label><textarea id="bIdea" maxlength="1500" placeholder="Describe the tattoo or piercing you'd like" required></textarea></div>
+        <div style="display:none" aria-hidden="true"><input type="text" id="bHoney" tabindex="-1" autocomplete="off" /></div>
+        <button type="submit" class="form-submit" id="bookBtn">Send Booking Request</button>
+      </form>
+    </div>
+  
+
+  <section class="social-strip">
+        <p>Stay connected with us</p>
+        <div class="social-icons large">
+          <a
+            href="https://www.facebook.com/share/1Ap2fsXKtE/"
+            target="_blank"
+            rel="noopener"
+            aria-label="Facebook"
+          >
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"
+              />
+            </svg>
+            <span>Facebook</span>
+          </a>
+          <a
+            href="https://www.instagram.com/gypsytattoosza?igsh=MWUyMXhrZ3Jjdm16ag=="
+            target="_blank"
+            rel="noopener"
+            aria-label="Instagram"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+            </svg>
+            <span>Instagram</span>
+          </a>
+          <a
+            href="https://wa.me/27832794589"
+            target="_blank"
+            rel="noopener"
+            aria-label="WhatsApp"
+          >
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"
+              />
+            </svg>
+            <span>WhatsApp</span>
+          </a>
+          <a
+            href="https://www.tiktok.com/@gypsytattoosza?_r=1&_t=ZS-95kQB00Ptwo"
+            target="_blank"
+            rel="noopener"
+            aria-label="tiktok"
+          >
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M12 2c1.1 0 2 .9 2 2v12.5c0 2.5-2 4.5-4.5 4.5S5 19 5 16.5c0-2.2 1.5-4 3.5-4.4V15c0 .8.7 1.5 1.5 1.5s1.5-.7 1.5-1.5V4c0-1.1.9-2 2-2h0zM16 4c.7.6 1.5 1 2.5 1h.5v2c-1.5 0-2.9-.5-4-1.3V4h1z"
+              />
+            </svg>
+            <span>tiktok</span>
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <!-- ── FOOTER ── -->
+    <footer class="site-footer">
+      <p>
+        © 2026 Gypsy Tattoo · <a href="contact.html">Contact</a> ·
+        <a href="info.html">About</a>
+      </p>
+    </footer>
+
+  <!-- EmailJS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script src="script.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+  <script src="supabase-db.js"></script>
+  <script>
+    const SLOTS = ["Morning", "Afternoon"];
+    const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+    let cal = { blocked: [], booked: [] }, away = new Set();
+    let view = new Date(); view.setDate(1);
+    let picked = null, pickedSlot = null;
+
+    const iso = (d) => d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+    const todayIso = () => iso(new Date());
+
+    function rangeDates(start, end) {
+      const out = [], a = new Date(start + "T00:00:00"), b = new Date((end || start) + "T00:00:00");
+      for (let d = a, n = 0; d <= b && n < 60; d.setDate(d.getDate() + 1), n++) out.push(iso(d));
+      return out;
+    }
+    function bookedSlots(date) { return cal.booked.filter((b) => b.date === date).map((b) => b.slot); }
+    function dayState(date) {
+      if (date < todayIso()) return "past";
+      if (cal.blocked.includes(date) || away.has(date)) return "away";
+      const n = bookedSlots(date).length;
+      return n >= SLOTS.length ? "booked" : n > 0 ? "limited" : "free";
+    }
+
+    function render() {
+      document.getElementById("calTitle").textContent = MONTHS[view.getMonth()] + " " + view.getFullYear();
+      const first = new Date(view.getFullYear(), view.getMonth(), 1);
+      const lead = (first.getDay() + 6) % 7;                       // Monday-first
+      const days = new Date(view.getFullYear(), view.getMonth() + 1, 0).getDate();
+      let html = "";
+      for (let i = 0; i < lead; i++) html += '<div class="cal-cell empty"></div>';
+      for (let d = 1; d <= days; d++) {
+        const date = iso(new Date(view.getFullYear(), view.getMonth(), d));
+        const st = dayState(date);
+        const ok = st === "free" || st === "limited";
+        html += `<button type="button" class="cal-cell ${st}${date === picked ? " picked" : ""}" ${ok ? "" : "disabled"} data-date="${date}"><b>${d}</b><small>${st === "away" ? "Away" : st === "booked" ? "Full" : st === "limited" ? "1 left" : st === "free" ? "Free" : ""}</small></button>`;
+      }
+      document.getElementById("calGrid").innerHTML = html;
+    }
+
+    document.getElementById("calGrid").addEventListener("click", (e) => {
+      const b = e.target.closest(".cal-cell[data-date]");
+      if (!b || b.disabled) return;
+      picked = b.dataset.date; pickedSlot = null;
+      const taken = bookedSlots(picked);
+      document.getElementById("slotPick").innerHTML = SLOTS.map((s) =>
+        `<button type="button" class="slot-btn" data-slot="${s}" ${taken.includes(s) ? "disabled" : ""}>${s}${taken.includes(s) ? " (taken)" : ""}</button>`).join("");
+      const nice = new Date(picked + "T00:00:00").toLocaleDateString("en-ZA", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+      document.getElementById("bookPicked").textContent = nice;
+      const f = document.getElementById("bookForm"); f.style.display = "block";
+      f.scrollIntoView({ behavior: "smooth", block: "start" });
+      render();
+    });
+    document.getElementById("slotPick").addEventListener("click", (e) => {
+      const b = e.target.closest(".slot-btn"); if (!b || b.disabled) return;
+      pickedSlot = b.dataset.slot;
+      document.querySelectorAll(".slot-btn").forEach((x) => x.classList.toggle("on", x === b));
+    });
+    document.getElementById("calPrev").onclick = () => { view.setMonth(view.getMonth() - 1); render(); };
+    document.getElementById("calNext").onclick = () => { view.setMonth(view.getMonth() + 1); render(); };
+
+    document.getElementById("bookForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (document.getElementById("bHoney").value) return;
+      const last = Number(localStorage.getItem("gypsyLastBooking") || 0);
+      if (Date.now() - last < 60000) { alert("Please wait a minute before sending another request."); return; }
+      const v = (id) => document.getElementById(id).value.trim();
+      const req = { name: v("bName"), email: v("bEmail"), phone: v("bPhone"), preferred_date: picked, slot: pickedSlot,
+                    idea: v("bIdea"), size: v("bSize") || null, placement: v("bPlace") || null };
+      if (!picked || !pickedSlot) { alert("Please choose a day and a time slot."); return; }
+      if (!req.name || !req.email || !req.phone || !req.idea) { alert("Please fill in all required fields."); return; }
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(req.email)) { alert("Please enter a valid email address."); return; }
+      const btn = document.getElementById("bookBtn"); btn.disabled = true; btn.textContent = "Sending…";
+      try {
+        await submitBookingRequest(req);
+        localStorage.setItem("gypsyLastBooking", String(Date.now()));
+        // Optional email heads-up to the owner (uses the same EmailJS template as the contact form)
+        try {
+          emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+          await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+            from_name: req.name, from_email: req.email, phone: req.phone, reply_to: req.email,
+            message: `BOOKING REQUEST\nDate: ${req.preferred_date} (${req.slot})\nSize: ${req.size || "-"}\nPlacement: ${req.placement || "-"}\nIdea: ${req.idea}`,
+          });
+        } catch (_) {}
+        document.getElementById("bookForm").style.display = "none";
+        document.getElementById("successMsg").style.display = "block";
+      } catch (err) {
+        btn.disabled = false; btn.textContent = "Send Booking Request";
+        alert(String(err.message || "").includes("Too many") ? err.message : "Sorry, that didn't go through. Please try WhatsApp instead.");
+      }
+    });
+
+    (async function init() {
+      render();
+      try {
+        const d = await getAllData(["gypsyCalendar", "gypsyMarkets", "gypsyEvents"]);
+        cal = Object.assign({ blocked: [], booked: [] }, Array.isArray(d.gypsyCalendar) ? {} : d.gypsyCalendar);
+        [].concat(d.gypsyMarkets || [], d.gypsyEvents || []).forEach((m) => { if (m.date) rangeDates(m.date, m.endDate).forEach((x) => away.add(x)); });
+      } catch (e) { console.warn(e); }
+      render();
+    })();
+  </script>
+</body>
+</html>

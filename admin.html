@@ -4,10 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Gypsy Tattoo — Admin</title>
+    <meta name="description" content="Gypsy Tattoo - independent travelling tattoo and piercing studio. Book a session, see pricing, markets and events." />
+    <meta name="theme-color" content="#301854" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" href="assets/icon-192.png" />
+    <link rel="apple-touch-icon" href="assets/icon-180.png" />
     <link rel="stylesheet" href="style.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
-      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Almendra:wght@400;700&display=swap"
       rel="stylesheet"
     />
     <style>
@@ -55,6 +60,28 @@
       </header>
 
       <div class="admin-body">
+        <!-- ── BOOKINGS & CALENDAR ── -->
+        <div class="section-header"><h2 class="section-title">📅 Booking Requests</h2></div>
+        <div id="requestsList"></div>
+
+        <div class="pricing-block">
+          <div class="pricing-block-header"><h3>Calendar controls</h3></div>
+          <p style="margin-bottom:.5rem">Block a day (travelling, market, day off). Markets &amp; events you add below are blocked automatically.</p>
+          <div class="cal-admin-row">
+            <input type="date" id="blockDate" />
+            <button class="save-btn" onclick="blockDay()">Block day</button>
+          </div>
+          <div id="blockedChips"></div>
+          <p style="margin:1rem 0 .5rem">Mark a slot as booked yourself (e.g. a client who booked by WhatsApp):</p>
+          <div class="cal-admin-row">
+            <input type="date" id="slotDate" />
+            <select id="slotName"><option>Morning</option><option>Afternoon</option></select>
+            <button class="save-btn" onclick="addBookedSlot()">Mark booked</button>
+          </div>
+          <div id="bookedChips"></div>
+        </div>
+
+        <hr class="divider" />
         <!-- ── MARKETS ── -->
         <div class="section-header">
           <h2 class="section-title">🛒 Markets</h2>
@@ -216,6 +243,15 @@
             </thead>
             <tbody id="travelAdminBody"></tbody>
           </table>
+        </div>
+
+        <hr class="divider" />
+        <div class="section-header"><h2 class="section-title">💾 Backup &amp; Import</h2></div>
+        <div class="pricing-block">
+          <button class="save-btn" onclick="exportBackup()">Download backup (JSON)</button>
+          <p style="margin:1rem 0 .5rem">Import (paste a backup here to restore or migrate data):</p>
+          <textarea id="importBox" rows="4" style="width:100%" placeholder='{"gypsyMarkets":[...]}'></textarea>
+          <button class="save-btn" style="margin-top:.5rem" onclick="importBackup()">Import</button>
         </div>
       </div>
     </div>
@@ -395,26 +431,19 @@
     <!-- ══ TOAST ══ -->
     <div class="toast" id="toast"></div>
 
-    <!-- Firebase DB layer — must load before inline script -->
-    <script src="firebase-db.js"></script>
-    <!-- Admin credentials — this file is gitignored and never pushed to GitHub -->
-    <script src="admin-config.js"></script>
+    <!-- Database layer (Supabase) -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+    <script src="supabase-db.js"></script>
 
     <script>
-      // ── Simple session-based login (no Firebase Auth dependency) ──
-      // ADMIN_EMAIL and ADMIN_PASSWORD are loaded from admin-config.js
+      // ── Real login via Supabase Auth ──
+      // The password is checked by Supabase's servers. Even if someone bypasses
+      // this screen, the database refuses every write unless the owner is signed in.
+      let failCount = 0, lockUntil = 0;
 
-      const SESSION_KEY = "gypsyAdminSession";
-
-      function isLoggedIn() {
-        return sessionStorage.getItem(SESSION_KEY) === "true";
-      }
-
-      // Restore session on page load
-      window.addEventListener("DOMContentLoaded", () => {
-        if (isLoggedIn()) {
-          showAdminApp();
-        }
+      window.addEventListener("DOMContentLoaded", async () => {
+        try { if (await adminSession()) showAdminApp(); }
+        catch (e) { console.warn(e); }
       });
 
       function showAdminApp() {
@@ -423,37 +452,37 @@
         initAdminData();
       }
 
-      function doLogin() {
+      async function doLogin() {
         const email = document.getElementById("loginEmail").value.trim();
         const pass  = document.getElementById("loginPass").value;
         const errEl = document.getElementById("loginError");
         const btn   = document.getElementById("loginBtn");
+        const fail = (m) => { errEl.style.display = "block"; errEl.textContent = m; };
 
-        if (!email || !pass) {
-          errEl.style.display = "block";
-          errEl.textContent = "Please enter your email and password.";
-          return;
-        }
+        if (Date.now() < lockUntil) { fail("Too many attempts. Wait 30 seconds."); return; }
+        if (!email || !pass) { fail("Please enter your email and password."); return; }
 
-        if (email === ADMIN_EMAIL && pass === ADMIN_PASSWORD) {
-          sessionStorage.setItem(SESSION_KEY, "true");
+        btn.disabled = true; btn.textContent = "Signing in…";
+        try {
+          await adminSignIn(email, pass);
           errEl.style.display = "none";
           showAdminApp();
-        } else {
-          errEl.style.display = "block";
-          errEl.textContent = "Incorrect email or password. Please try again.";
+        } catch (err) {
+          if (++failCount >= 5) { lockUntil = Date.now() + 30000; failCount = 0; }
+          fail("Incorrect email or password. Please try again.");
           document.getElementById("loginPass").value = "";
-          document.getElementById("loginPass").focus();
+        } finally {
+          btn.disabled = false; btn.textContent = "Sign In";
         }
       }
 
-      function logout() {
-        sessionStorage.removeItem(SESSION_KEY);
+      async function logout() {
+        try { await adminSignOut(); } catch (e) {}
         location.reload();
       }
 
-      // ── Data helpers (now async — backed by Firebase) ──
-      // getData / setData are provided by firebase-db.js
+      // ── Data helpers (async, backed by Supabase) ──
+      // getData / setData are provided by supabase-db.js
       // Synchronous shim for places that haven't been converted yet:
       function getDataSync(key) {
         const s = localStorage.getItem(key);
@@ -624,16 +653,16 @@
           </div>
           <div class="admin-card-info">
             <div class="admin-card-name">
-              ${e.name}
+              ${esc(e.name)}
               ${past ? '<span class="past-badge">Past</span>' : ""}
-              ${e.recurring ? `<span class="past-badge" style="background:#e8f5e9;color:#2e7d32">${e.recurring}</span>` : ""}
+              ${e.recurring ? `<span class="past-badge" style="background:#e8f5e9;color:#2e7d32">${esc(e.recurring)}</span>` : ""}
             </div>
             <div class="admin-card-meta">
               <span>📅 ${d.full}${e.endDate ? " → " + formatDate(e.endDate).full : ""}</span>
-              ${e.location ? `<span>📍 ${e.location}</span>` : ""}
-              ${e.time ? `<span>🕐 ${e.time}</span>` : ""}
+              ${e.location ? `<span>📍 ${esc(e.location)}</span>` : ""}
+              ${e.time ? `<span>🕐 ${esc(e.time)}</span>` : ""}
             </div>
-            ${e.description ? `<div class="admin-card-desc">${e.description}</div>` : ""}
+            ${e.description ? `<div class="admin-card-desc">${esc(e.description)}</div>` : ""}
           </div>
           <div class="admin-card-actions">
             <button class="icon-btn edit-icon-btn" onclick="openModal('${type}', '${e.id}')" title="Edit">✏️</button>
@@ -714,7 +743,7 @@
           .map(
             (img) => `
         <div class="img-thumb">
-          <img src="${img.src}" alt="Portfolio image" />
+          <img src="${esc(img.src)}" alt="Portfolio image" />
           <div class="img-thumb-overlay">
             <button class="img-thumb-del" onclick="deletePortfolioImg('${img.id}')">🗑 Remove</button>
           </div>
@@ -899,13 +928,13 @@
             (f) => `
         <div class="flash-admin-card">
           <div class="flash-admin-thumb">
-            ${f.src ? `<img src="${f.src}" alt="${f.title}" />` : "⚡"}
+            ${f.src ? `<img src="${esc(f.src)}" alt="${esc(f.title)}" />` : "⚡"}
           </div>
           <div class="flash-admin-info">
-            <div class="flash-admin-title">${f.title}</div>
+            <div class="flash-admin-title">${esc(f.title)}</div>
             <div class="flash-admin-tag">
-              ${f.tag ? f.tag + " · " : ""}
-              <span class="status-tag ${statusColors[f.status] || "status-available"}">${f.status}</span>
+              ${f.tag ? esc(f.tag) + " · " : ""}
+              <span class="status-tag ${statusColors[f.status] || "status-available"}">${esc(f.status)}</span>
             </div>
           </div>
           <div class="admin-card-actions">
@@ -1072,8 +1101,8 @@
           .map(
             (r) => `
           <tr>
-            <td>${r.desc}</td>
-            <td><strong>${r.price}</strong></td>
+            <td>${esc(r.desc)}</td>
+            <td><strong>${esc(r.price)}</strong></td>
             <td style="text-align:right;white-space:nowrap">
               <button class="icon-btn edit-icon-btn" onclick="openPricingModal('${cat}','${r.id}')" title="Edit">✏️</button>
               <button class="icon-btn delete-icon-btn" onclick="deletePricingRow('${cat}','${r.id}')" title="Delete">🗑</button>
@@ -1120,6 +1149,100 @@
         document.getElementById("weddingIntimatePrice").value = wp.priceIntimate;
       }
 
+      // ── Bookings & calendar ──
+      const BACKUP_KEYS = ["gypsyMarkets","gypsyEvents","gypsyPortfolio","gypsyFlash","gypsyPricing","gypsyPiercingNote","gypsyWeddingPackage","gypsyCalendar"];
+      let requests = [];
+
+      function getCal() {
+        const c = getDataSync("gypsyCalendar");
+        return { blocked: (c && c.blocked) || [], booked: (c && c.booked) || [] };
+      }
+      async function saveCal(c) {
+        showToast("⏳ Saving…");
+        try { await setData("gypsyCalendar", c); renderCalendarAdmin(); showToast("✅ Calendar updated."); }
+        catch { showToast("❌ Save failed — are you signed in?"); }
+      }
+      function blockDay() {
+        const d = document.getElementById("blockDate").value; if (!d) return;
+        const c = getCal(); if (!c.blocked.includes(d)) c.blocked.push(d);
+        c.blocked.sort(); saveCal(c);
+      }
+      function unblockDay(d) { const c = getCal(); c.blocked = c.blocked.filter((x) => x !== d); saveCal(c); }
+      function addBookedSlot() {
+        const date = document.getElementById("slotDate").value, slot = document.getElementById("slotName").value;
+        if (!date) return;
+        const c = getCal();
+        if (c.booked.some((b) => b.date === date && b.slot === slot)) { showToast("⚠️ Already booked."); return; }
+        c.booked.push({ date, slot }); c.booked.sort((a, b) => a.date.localeCompare(b.date)); saveCal(c);
+      }
+      function removeBookedSlot(date, slot) { const c = getCal(); c.booked = c.booked.filter((b) => !(b.date === date && b.slot === slot)); saveCal(c); }
+
+      function renderCalendarAdmin() {
+        const c = getCal(), today = new Date().toISOString().slice(0, 10);
+        document.getElementById("blockedChips").innerHTML = c.blocked.filter((d) => d >= today)
+          .map((d) => `<span class="chip">🚫 ${esc(d)} <button onclick="unblockDay('${esc(d)}')" title="Unblock">✕</button></span>`).join("") || "<em>No blocked days.</em>";
+        document.getElementById("bookedChips").innerHTML = c.booked.filter((b) => b.date >= today)
+          .map((b) => `<span class="chip">✅ ${esc(b.date)} ${esc(b.slot)} <button onclick="removeBookedSlot('${esc(b.date)}','${esc(b.slot)}')" title="Free this slot">✕</button></span>`).join("") || "<em>No booked slots.</em>";
+      }
+
+      async function loadRequests() {
+        const box = document.getElementById("requestsList");
+        try { requests = await getBookingRequests(); }
+        catch (e) { box.innerHTML = '<div class="empty-admin"><p>Could not load requests. Have you run supabase-schema.sql?</p></div>'; return; }
+        if (!requests.length) { box.innerHTML = '<div class="empty-admin"><div class="icon">📭</div><p>No booking requests yet.</p></div>'; return; }
+        box.innerHTML = requests.map((r) => {
+          const digits = String(r.phone).replace(/\D/g, "").replace(/^0/, "27");
+          const msg = encodeURIComponent(`Hi ${r.name}, regarding your booking request for ${r.preferred_date} (${r.slot}) at Gypsy Tattoo: `);
+          return `<div class="req-card">
+            <div class="req-top"><span>${esc(r.name)}</span><span class="req-badge ${esc(r.status)}">${esc(r.status)}</span></div>
+            <p>📅 <strong>${esc(r.preferred_date)}</strong> · ${esc(r.slot)}</p>
+            <p>📞 ${esc(r.phone)} · ✉️ ${esc(r.email)}</p>
+            ${r.size ? `<p>📏 ${esc(r.size)}</p>` : ""}${r.placement ? `<p>📍 ${esc(r.placement)}</p>` : ""}
+            <p>💡 ${esc(r.idea)}</p>
+            <div class="req-actions">
+              ${r.status === "pending" ? `<button class="save-btn" onclick="approveRequest('${esc(r.id)}')">✅ Approve</button><button class="cancel-btn" onclick="declineRequest('${esc(r.id)}')">Decline</button>` : ""}
+              <a class="cancel-btn" target="_blank" rel="noopener" href="https://wa.me/${digits}?text=${msg}">WhatsApp</a>
+              <a class="cancel-btn" href="mailto:${esc(r.email)}?subject=${encodeURIComponent("Your Gypsy Tattoo booking")}">Email</a>
+              <button class="cancel-btn" onclick="removeRequest('${esc(r.id)}')">🗑</button>
+            </div></div>`;
+        }).join("");
+      }
+      async function approveRequest(id) {
+        const r = requests.find((x) => x.id === id); if (!r) return;
+        const c = getCal();
+        if (c.booked.some((b) => b.date === r.preferred_date && b.slot === r.slot)) { showToast("⚠️ That slot is already booked."); return; }
+        c.booked.push({ date: r.preferred_date, slot: r.slot });
+        c.booked.sort((a, b) => a.date.localeCompare(b.date));
+        try { await setData("gypsyCalendar", c); await updateBookingRequest(id, { status: "approved" }); showToast("✅ Approved & slot booked."); }
+        catch { showToast("❌ Failed — are you signed in?"); }
+        renderCalendarAdmin(); loadRequests();
+      }
+      async function declineRequest(id) {
+        try { await updateBookingRequest(id, { status: "declined" }); showToast("Declined."); } catch { showToast("❌ Failed."); }
+        loadRequests();
+      }
+      async function removeRequest(id) {
+        if (!confirm("Delete this request permanently?")) return;
+        try { await deleteBookingRequest(id); showToast("🗑 Deleted."); } catch { showToast("❌ Failed."); }
+        loadRequests();
+      }
+
+      // ── Backup / import ──
+      function exportBackup() {
+        const out = {}; BACKUP_KEYS.forEach((k) => { out[k] = getDataSync(k); });
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(new Blob([JSON.stringify(out, null, 2)], { type: "application/json" }));
+        a.download = "gypsy-backup-" + new Date().toISOString().slice(0, 10) + ".json"; a.click();
+      }
+      async function importBackup() {
+        let obj; try { obj = JSON.parse(document.getElementById("importBox").value); } catch { showToast("⚠️ That isn't valid JSON."); return; }
+        const keys = Object.keys(obj).filter((k) => BACKUP_KEYS.includes(k) && obj[k] != null);
+        if (!keys.length) { showToast("⚠️ Nothing to import."); return; }
+        if (!confirm("Import " + keys.length + " section(s)? This overwrites the current data for them.")) return;
+        try { for (const k of keys) await setData(k, obj[k]); showToast("✅ Imported."); renderAdmin(); }
+        catch { showToast("❌ Import failed — are you signed in?"); }
+      }
+
       // Patch renderAdmin to also render gallery + flash + pricing
       const _origRenderAdmin = renderAdmin;
       renderAdmin = function () {
@@ -1127,24 +1250,25 @@
         renderPortfolioAdmin();
         renderFlashAdmin();
         renderPricingAdmin();
+        renderCalendarAdmin();
       };
 
-      // ── On load: pull all data from Firebase into localStorage, then render ──
+      // ── On load: pull all data from Supabase into localStorage, then render ──
       async function initAdminData() {
         const keys = [
           "gypsyMarkets", "gypsyEvents",
           "gypsyPortfolio", "gypsyFlash",
-          "gypsyPricing", "gypsyPiercingNote", "gypsyWeddingPackage",
+          "gypsyPricing", "gypsyPiercingNote", "gypsyWeddingPackage", "gypsyCalendar",
         ];
         try {
-          await getAllData(keys); // populates localStorage from Firebase
+          await getAllData(keys); // populates localStorage from Supabase
         } catch (err) {
-          console.warn("Firebase load failed, using local cache:", err);
+          console.warn("Database load failed, using local cache:", err);
         }
         renderAdmin();
+        loadRequests();
       }
 
-      // initAdminData() is called by onAuthStateChanged above when user is signed in
     </script>
   </body>
 </html>
